@@ -749,10 +749,21 @@
       [data-pencil-id="gtbvI"]{ flex:0 0 600px !important; width:600px !important; min-width:0 !important; overflow:visible !important; }
       /* airier Tricsy card — vertical breathing room only (keep H-padding 40 so mascot stays in).
          tight within groups, generous between the head / body / progress / actions rows */
-      [data-pencil-id="Y57i4u"]{ padding:44px 40px !important; height:340px !important; top:1365px !important; }  /* centered: equal gap PARKING↕card↕BH-logo */
-      [data-pencil-id="kPuZA"]{ display:none !important; }   /* remove Accept/Cancel — deselect by re-tapping the floor */
-      [data-pencil-id="TflLk"]{ width:600px !important; }    /* keep the Auto-accept chip inside the content (no longer over the mascot) */
-      [data-pencil-id="uTkV1"]{ display:none !important; }   /* hide the "Tricsy" text — the logo carries the name */
+      /* === TricsyCard rebuilt 1:1 from Pencil (TricsyCardbutton / nobutton) === */
+      [data-pencil-id="Y57i4u"]{ padding:38px 40px !important; height:315px !important; top:1378px !important; align-items:flex-end !important; gap:16px !important; overflow:visible !important; }
+      .tc-content{ width:578px; display:flex; flex-direction:column; gap:26px; align-items:flex-start; position:relative; z-index:0; }
+      .tc-head{ width:853px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+      .tc-brand{ display:flex; flex-direction:row; align-items:center; gap:14px; }
+      .tc-logo{ width:160px; height:85px; flex-shrink:0; background:url('floor-names/tricsylogo1.png') left center/contain no-repeat; }
+      .tc-recommends{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
+      .tc-body{ display:flex; flex-direction:row; align-items:center; gap:24px; height:112px; width:100%; }
+      .tc-circles{ position:relative; height:75px; flex-shrink:0; }
+      .tc-circle{ position:absolute; top:0; width:75px; height:75px; border-radius:48px; display:flex; align-items:center; justify-content:center;
+                  background-image:linear-gradient(-90deg,#3B82F6,#1D4ED8); box-shadow:0 0 26px #2563EBAA; color:#fff; font:700 44px Montserrat,system-ui,sans-serif; }
+      .tc-txt{ display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+      .tc-title{ color:#FFFFFF; font:700 34px Montserrat,system-ui,sans-serif; white-space:nowrap; }
+      .tc-sub{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
+      .tc-mascot{ position:absolute; left:623px; top:26px; width:261px; height:306px; background:url('floor-names/tricsy3.png') center/contain no-repeat; z-index:1; }
       [data-pencil-id="gtbvI"]{ gap:34px !important; }      /* between head · body · progress · actions */
       [data-pencil-id="wpS7Q"]{ gap:26px !important; }      /* badge ↔ title/reason */
       [data-pencil-id="oBDGQ"]{ gap:10px !important; }      /* title ↔ reason (tight pair) */
@@ -839,12 +850,7 @@
       ensureTrail(pill('f3'),'nature'); ensureTrail(pill('fm1'),'parking');
 
       const wm=$('[data-pencil-name="titleWordmark"]'), kick=$('[data-pencil-name="hKickTx"]'), sub=$('[data-pencil-name="hSub"]');
-      const card=$('[data-pencil-id="Y57i4u"]'), cdTx=$('[data-pencil-name="cdTx"]');
-      const bn=$('[data-pencil-name="bn"]'), tTitle=$('[data-pencil-name="tTitle"]'), tReason=$('[data-pencil-name="tReason"]');
-      // header brand → Tricsy logo (replaces the ✦ sparkle; "Tricsy" word hidden via CSS)
-      (function(){ const sp=$('[data-pencil-id="q6hKx"]'); if(sp){ const lg=document.createElement('div');
-        lg.style.cssText="height:60px;width:112px;flex-shrink:0;background:url('floor-names/tricsylogo1.png') left center/contain no-repeat;";
-        sp.replaceWith(lg); } })();
+      const card=$('[data-pencil-id="Y57i4u"]');
       // weather pill: sun icon before "22 °C"
       (function(){ const wp=$('[data-pencil-id="thgDp"]'); if(wp) wp.insertAdjacentHTML('afterbegin',
         '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" style="width:24px;height:24px;flex-shrink:0;margin-right:6px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'); })();
@@ -872,27 +878,28 @@
       const setLift=(o,on,up)=>{ o.el.classList.remove('la','lp'); o.el.classList.add(on?'la':'lp'); if(on) o.dir.classList.toggle('dir-up',up); };
       const setWordmark=f=>{ wm.style.opacity='1'; wm.style.backgroundImage="url('floor-names/"+f.key+"_s.png')"; };
 
-      // --- redesigned Tricsy card: no chip / progress / buttons; greeting → selected-floor circles (press order, max 4) ---
-      ['hB92u','KSCez','wpS7Q'].forEach(id=>{ const e=$('[data-pencil-id="'+id+'"]'); if(e) e.style.display='none'; });
-      const cardMain=document.createElement('div');
-      cardMain.style.cssText='display:flex;align-items:center;gap:16px;min-height:84px;width:100%;';
-      $('[data-pencil-id="gtbvI"]').appendChild(cardMain);
+      // --- rebuild the Tricsy card 1:1 from Pencil (TricsyCardbutton / nobutton) ---
+      card.innerHTML=
+        '<div class="tc-content">'+
+          '<div class="tc-head"><div class="tc-brand"><div class="tc-logo"></div><div class="tc-recommends">recommends</div></div></div>'+
+          '<div class="tc-body"><div class="tc-circles" id="tcCircles"></div>'+
+            '<div class="tc-txt"><div class="tc-title" id="tcTitle"></div><div class="tc-sub" id="tcSub"></div></div></div>'+
+        '</div>'+
+        '<div class="tc-mascot"></div>';
+      const tcCircles=$('#tcCircles'), tcTitle=$('#tcTitle'), tcSub=$('#tcSub');
+      const STEP=54;   // circle overlap step (px), first-pressed sits left + on top
       function renderStops(){
-        cardMain.innerHTML='';
-        if(dests.size===0){
-          cardMain.innerHTML=
-            '<div style="display:flex;flex-direction:column;gap:10px;">'+
-              '<div style="color:#E7ECF5;font:700 36px Montserrat,system-ui,sans-serif;">Hi! Where can I take you?</div>'+
-              '<div style="color:#8A8F98;font:400 24px Montserrat,system-ui,sans-serif;">Tricsy suggests <span style="color:#93C5FD;font-weight:700">FINGER</span> · meeting in 8 min</div>'+
-            '</div>';
-          return;
-        }
-        [...dests].forEach(idx=>{
-          const c=document.createElement('div');
-          c.style.cssText='flex:0 0 auto;width:74px;height:74px;border-radius:50%;display:flex;align-items:center;justify-content:center;background-image:linear-gradient(-90deg,#3B82F6,#1D4ED8);box-shadow:0 0 22px #2563EBAA;color:#fff;font:700 32px Montserrat,system-ui,sans-serif;';
-          c.textContent=byIdx(idx).n;
-          cardMain.appendChild(c);
+        const arr=[...dests];
+        tcCircles.innerHTML='';
+        tcCircles.style.width = arr.length ? ((arr.length-1)*STEP+75)+'px' : '0px';
+        arr.forEach((idx,i)=>{
+          const c=document.createElement('div'); c.className='tc-circle';
+          c.style.left=(i*STEP)+'px'; c.style.zIndex=String(100-i);
+          c.textContent=byIdx(idx).n; tcCircles.appendChild(c);
         });
+        if(arr.length===0){ tcTitle.textContent='Hi! Where can I take you?'; tcSub.textContent='Elevators coming'; }
+        else if(arr.length===1){ const f=byIdx(arr[0]); tcTitle.textContent='Take '+f.key.toUpperCase()+' · Floor '+f.n; tcSub.textContent='Your destination'; }
+        else { tcTitle.textContent='Lift is coming'; tcSub.textContent='Have a nice day'; }
       }
 
       // dispatch + UI for the current set of destinations (multi-select)
