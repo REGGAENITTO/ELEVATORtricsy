@@ -1,0 +1,6 @@
+.DS_Store
+**/.DS_Store
+# private working notes / checkpoints — kept out of git per project policy
+Kontext elevatorscreen15/
+# temp Pencil export
+_export_*.html

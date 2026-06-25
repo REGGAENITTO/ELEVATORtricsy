@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tricsy Elevator Panel — Demo (exact .pen layout)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0" rel="stylesheet">
+<style>
+:root{
+  --blue1:#3B82F6; --blue2:#1D4ED8; --soft:#60A5FA; --ice:#93C5FD;
+  --grad:linear-gradient(180deg,#3B82F6,#1D4ED8);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0c;font-family:'Montserrat',sans-serif;color:#fff;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:16px;padding:20px 10px 34px}
+.material-symbols-rounded{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 40;line-height:1}
+
+/* ---- scaled 1080x1920 stage, 1:1 with the .pen ---- */
+#wrap{transform-origin:top center}
+.screen{position:relative;width:1080px;height:1920px;background:#000;border-radius:48px;overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.abs{position:absolute}
+
+/* TopBar */
+.topbar{position:absolute;left:72px;right:72px;top:56px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.tbLeft{display:flex;align-items:center;gap:24px}
+.chip{display:flex;align-items:center;gap:14px;padding:18px 22px;border-radius:24px;background:#15171E;
+  font-size:22px;color:#C9CDD4;white-space:nowrap}
+.chip .material-symbols-rounded{font-size:22px;color:#8A8F98}
+.chip.time{background:var(--grad);color:#fff;font-weight:700;gap:8px}
+.chip.time .material-symbols-rounded{color:#fff;font-size:24px}
+.avatarTop{width:56px;height:56px;border-radius:28px;background:#15171E;display:flex;align-items:center;justify-content:center}
+.avatarTop .material-symbols-rounded{font-size:26px;color:#C9CDD4}
+
+/* Header */
+.header{position:absolute;left:72px;right:72px;top:128px;height:381px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:21px;padding:64px 0 8px;transition:height .32s cubic-bezier(.5,0,.2,1)}
+.header.up{height:259px}
+.kicker{display:flex;align-items:center;gap:10px;background:#0E1A3A;border:1px solid #1E3A8A;border-radius:20px;padding:12px 20px}
+.kicker .material-symbols-rounded{font-size:22px;color:var(--soft)}
+.kicker span{font-size:18px;font-weight:700;letter-spacing:2px;color:var(--soft)}
+.title{display:flex;align-items:center;justify-content:space-between;width:672px}
+.title .word{height:90px;width:auto}
+.title .glyph{height:84px;width:auto}
+.subtitle{font-size:26px;font-weight:700;color:#8A8F98;text-align:center}
+
+/* Body (936 x 1051) absolute children at exact .pen coords */
+.body{position:absolute;left:72px;top:509px;width:936px;height:1051px;transition:top .32s cubic-bezier(.5,0,.2,1)}
+.body.up{top:378px}
+.rail{position:absolute;width:4px;height:640px;top:180px;border-radius:2px;background:#202430}
+.rail.l{left:38px}.rail.r{left:894px}
+.dot{position:absolute;width:16px;height:16px;border-radius:50%;border:4px solid #3A3F4C;background:transparent}
+
+.floor{position:absolute;left:128px;width:676px;height:120px;border-radius:60px;
+  display:flex;align-items:center;justify-content:space-between;padding:16px 28px 16px 12px;
+  background:#1B2230;border:2px solid #43536F;cursor:pointer;transition:.18s ease}
+.floor .left{display:flex;align-items:center;gap:28px}
+.floor .badge{width:96px;height:96px;border-radius:48px;background:#232A3A;display:flex;align-items:center;justify-content:center;
+  font-size:42px;font-weight:700;color:#fff;flex:0 0 auto}
+.floor .word{height:44px;width:auto}
+.floor .trail{width:52px;height:56px;display:flex;align-items:center;justify-content:center}
+.floor .trail img{height:50px;width:auto}
+.floor.dim{opacity:.4}
+.floor.here{background:#101319;border:1px solid #23262F;opacity:.6;cursor:default}
+.floor.here .badge{color:#6B7280}
+.tag{display:flex;align-items:center;gap:10px;background:#16202E;border:1px solid #2A3550;border-radius:30px;
+  padding:14px 22px;font-size:24px;font-weight:700;color:#A7B0C0}
+.tag .material-symbols-rounded{font-size:26px;color:#8A93A6}
+.tag.white{background:#fff;color:#1D4ED8;border:none}
+.tag.white .material-symbols-rounded{color:#1D4ED8}
+.floor.sel{background:var(--grad);border:2px solid var(--soft);box-shadow:0 10px 40px rgba(37,99,235,.4)}
+.floor.sel .badge{background:#fff;color:var(--blue2)}
+.floor.rec{background:var(--grad);border:2px solid var(--soft);box-shadow:0 10px 40px rgba(37,99,235,.4)}
+.floor.rec .badge{background:#fff;color:var(--blue2)}
+.check{width:64px;height:64px;border-radius:32px;background:#fff;display:flex;align-items:center;justify-content:center}
+.check .material-symbols-rounded{font-size:40px;color:var(--blue2)}
+
+/* cabins */
+.cabin{position:absolute;width:64px;border-radius:18px;background:#141821;border:1px solid #262C39;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  transition:top .55s cubic-bezier(.5,0,.2,1),.2s ease;overflow:hidden;height:64px}
+.cabin .el{font-size:38px;color:#9AA1AD}
+.cabin .ar{font-size:30px;color:#9AA1AD;display:none}
+.cabin.l{left:8px}.cabin.r{left:864px}
+.cabin.on{width:72px;height:108px;border-radius:22px;background:var(--grad);border:2px solid var(--ice);
+  box-shadow:0 0 26px rgba(37,99,235,.7)}
+.cabin.on.l{left:4px}.cabin.on.r{left:858px}
+.cabin.on .el{font-size:58px;color:#fff}
+.cabin.on .ar{display:block;color:#DBEAFE}
+.cabin.board{height:120px;border-color:#BFDBFE;border-width:3px;box-shadow:0 0 34px rgba(59,130,246,.8)}
+.cabin.board .ar{color:#fff}
+
+/* bhLogo */
+.bhlogo{position:absolute;left:485px;top:1812px;width:110px;height:45px;opacity:.55}
+.bhlogo img{width:100%;height:100%;object-fit:contain}
+
+/* ---- status strip (AutoConfirm) ---- */
+.strip{position:absolute;left:72px;top:1551px;width:936px;border-radius:40px;background:#0A0F1F;border:3px solid #1E3A8A;
+  padding:36px 32px;display:none;flex-direction:column;gap:35px}
+.strip.show{display:flex;animation:rise .28s ease}
+.strip.board{background:#0A1228;border-color:#2563EB}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.sRow{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.sLeft{display:flex;align-items:center;gap:24px}
+.liftBadge{height:84px;padding:0 22px;border-radius:42px;background:var(--grad);display:flex;align-items:center;justify-content:center;gap:4px;
+  font-size:36px;font-weight:700;color:#fff}
+.liftBadge .material-symbols-rounded{font-size:34px;color:#fff}
+.sTxt b{display:block;font-size:32px;font-weight:700}
+.sTxt span{display:block;font-size:24px;color:#8A8F98;margin-top:4px}
+.btnGhost{display:flex;align-items:center;gap:12px;background:#15171E;border:1px solid #2A3550;border-radius:28px;
+  padding:28px 20px;color:#A7B0C0;font-weight:700;font-size:26px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btnGhost .material-symbols-rounded{font-size:26px}
+.bar{height:10px;border-radius:5px;background:#1A2238;overflow:hidden}
+.bar i{display:block;height:100%;width:30%;background:var(--grad);border-radius:5px}
+
+/* ---- Tricsy AI card — hero variant B (exact: y1gaM/nRak2) ---- */
+.tricsy{position:absolute;left:72px;top:1337px;width:936px;border-radius:40px;background:#0A0F1F;border:3px solid #1E3A8A;
+  padding:38px 40px;display:none;align-items:flex-end;gap:16px}
+.tricsy.show{display:flex;animation:rise .3s ease}
+.tContent{flex:1;min-width:0;display:flex;flex-direction:column;gap:26px}
+.tMascot{flex:0 0 auto;width:240px;height:242px;background:url('floor-names/tricsy3.png') center/contain no-repeat}
+.tHead{display:flex;align-items:center;justify-content:space-between;width:853px}
+.tBrand{display:flex;align-items:center;gap:14px}
+.tBrand .material-symbols-rounded{font-size:30px;color:var(--soft)}
+.tBrand b{font-size:28px;font-weight:700}
+.tBrand span{font-size:24px;color:#8A8F98}
+.cd{display:flex;align-items:center;gap:8px;background:#0E1A3A;border:1px solid #1E3A8A;border-radius:22px;
+  padding:14px 18px;font-size:24px;font-weight:700;color:var(--ice)}
+.cd .material-symbols-rounded{font-size:24px;color:var(--soft)}
+.tBody{display:flex;align-items:center;gap:24px}
+.tBadge{width:96px;height:96px;border-radius:48px;background:var(--grad);display:flex;align-items:center;justify-content:center;
+  font-size:44px;font-weight:700;box-shadow:0 0 26px rgba(37,99,235,.6);flex:0 0 auto}
+.tTxt b{display:block;font-size:34px;font-weight:700}
+.tTxt span{display:block;font-size:24px;color:#8A8F98;margin-top:6px}
+.tActions{display:flex;gap:16px}
+.btnPrimary{flex:1;display:flex;align-items:center;justify-content:center;gap:12px;background:var(--grad);border:none;border-radius:30px;
+  padding:30px;color:#fff;font-weight:700;font-size:30px;cursor:pointer;font-family:inherit;box-shadow:0 8px 26px rgba(37,99,235,.4)}
+.btnPrimary .material-symbols-rounded{font-size:30px}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.controls button{background:#16181f;border:1px solid #2a2d38;color:#cfd3dc;font-family:inherit;font-weight:700;font-size:13px;
+  padding:11px 16px;border-radius:12px;cursor:pointer}
+.controls button:hover{background:#1f222c}
+.controls button.go{background:var(--grad);border:none;color:#fff}
+.hint{color:#6b7280;font-size:12px;text-align:center;max-width:560px;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="wrap"><div class="screen">
+
+  <!-- TopBar -->
+  <div class="topbar">
+    <div class="tbLeft">
+      <div class="chip time"><span class="material-symbols-rounded">schedule</span><b id="clock">12:48</b></div>
+      <div class="chip"><span class="material-symbols-rounded">calendar_today</span>29 May 2026</div>
+      <div class="chip">Hi Jakub</div>
+    </div>
+    <div class="avatarTop"><span class="material-symbols-rounded">person</span></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="kicker"><span class="material-symbols-rounded" id="kIcon">my_location</span><span id="kText">YOU ARE HERE</span></div>
+    <div class="title"><img class="word" id="hWord" src="floor-names/nature_s.png" alt=""><img class="glyph" id="hGlyph" src="floor-names/dotb_nature.png" alt=""></div>
+    <div class="subtitle" id="subtitle">Select your destination floor</div>
+  </div>
+
+  <!-- Body -->
+  <div class="body" id="body">
+    <div class="rail l"></div><div class="rail r"></div>
+    <!-- dots + floors + cabins injected by JS -->
+    <div class="cabin l" id="cabinA"><span class="material-symbols-rounded el">elevator</span><span class="material-symbols-rounded ar">arrow_downward</span></div>
+    <div class="cabin r" id="cabinB"><span class="material-symbols-rounded el">elevator</span><span class="material-symbols-rounded ar">arrow_downward</span></div>
+  </div>
+
+  <!-- status strip -->
+  <div class="strip" id="strip">
+    <div class="sRow">
+      <div class="sLeft">
+        <div class="liftBadge" id="sBadge"><span class="material-symbols-rounded">arrow_back</span>A</div>
+        <div class="sTxt"><b id="sTitle">Lift A is on the way</b><span id="sSub">Going down to FINGER · board when doors open</span></div>
+      </div>
+      <button class="btnGhost" id="sCancel" onclick="reset()"><span class="material-symbols-rounded">close</span>Cancel</button>
+    </div>
+    <div class="bar"><i id="sBar"></i></div>
+  </div>
+
+  <!-- Tricsy AI card — hero variant B -->
+  <div class="tricsy" id="tricsy">
+    <div class="tContent">
+      <div class="tHead">
+        <div class="tBrand"><span class="material-symbols-rounded">auto_awesome</span><b>Tricsy</b><span>recommends</span></div>
+        <div class="cd"><span class="material-symbols-rounded">timer</span><span id="cdText">Auto-accept in 0:08</span></div>
+      </div>
+      <div class="tBody">
+        <div class="tBadge" id="tBadge">1</div>
+        <div class="tTxt"><b id="tTitle">Take FINGER · Floor 1</b><span id="tReason">Meeting “Tricsy – UX update” starts in 8 min</span></div>
+      </div>
+      <div class="bar"><i id="tBar" style="width:0%"></i></div>
+      <div class="tActions">
+        <button class="btnPrimary" onclick="acceptTricsy()"><span class="material-symbols-rounded">check</span>Accept</button>
+        <button class="btnGhost" style="padding:30px 28px" onclick="reset()"><span class="material-symbols-rounded">edit</span>Change floor</button>
+      </div>
+    </div>
+    <div class="tMascot"></div>
+  </div>
+
+  <div class="bhlogo"><img src="floor-names/bh_logo.png" alt="BH"></div>
+
+</div></div>
+
+<div class="controls">
+  <button class="go" onclick="tricsyMeeting()">Tricsy: Meeting</button>
+  <button class="go" onclick="tricsyHome()">Tricsy: Koniec dňa</button>
+  <button onclick="reset()">Reset</button>
+</div>
+<div class="hint">Presný layout z .pen. Klikni poschodie → výber zmodrie + pridelí sa výťah (A vľavo / B vpravo) so smerovou šípkou a status stripom. Druhý klik na zvolené poschodie = „Board". Tlačidlá dole = Tricsy odporúčanie s auto-accept odpočtom.</div>
+
+<script>
+// floors top-down, exact .pen Y in body coords
+const FLOORS=[
+  {key:'nature', n:3,  name:'NATURE', y:120},
+  {key:'face',   n:2,  name:'FACE',   y:280},
+  {key:'finger', n:1,  name:'FINGER', y:440},
+  {key:'hub',    n:0,  name:'HUB',    y:600},
+  {key:'parking',n:-1, name:'PARKING',y:760},
+];
+const CURRENT='nature';
+const body=document.getElementById('body');
+const cabinA=document.getElementById('cabinA'), cabinB=document.getElementById('cabinB');
+let rows={}, cdTimer=null, recKey=null, selKey=null, lastLift={};
+
+function center(key){const f=FLOORS.find(x=>x.key===key);return f.y+60;}
+
+// dots
+FLOORS.forEach(f=>{
+  [['l',32],['r',888]].forEach(([side,x])=>{
+    const d=document.createElement('div'); d.className='dot';
+    d.style.left=x+'px'; d.style.top=(f.y+60-8)+'px'; body.appendChild(d);
+  });
+});
+// floor pills
+FLOORS.forEach(f=>{
+  const el=document.createElement('div');
+  el.className='floor'+(f.key===CURRENT?' here':'');
+  el.style.top=f.y+'px';
+  el.dataset.key=f.key;
+  el.innerHTML=floorInner(f, f.key===CURRENT?'here':'idle');
+  if(f.key!==CURRENT) el.onclick=()=>onFloor(f);
+  body.appendChild(el); rows[f.key]=el;
+});
+
+function floorInner(f, mode){
+  const left=`<div class="left"><div class="badge">${f.n}</div><img class="word" src="floor-names/${f.key}_s.png" alt="${f.name}"></div>`;
+  let right;
+  if(mode==='here') right=`<div class="tag"><span class="material-symbols-rounded">my_location</span>You are here</div>`;
+  else if(mode==='sel') right=`<div class="check"><span class="material-symbols-rounded">check</span></div>`;
+  else if(mode==='meeting') right=`<div class="tag white"><span class="material-symbols-rounded">calendar_month</span>10:00</div>`;
+  else if(mode==='car') right=`<div class="tag white"><span class="material-symbols-rounded">directions_car</span>Your car</div>`;
+  else right=`<div class="trail"><img src="floor-names/dotb_${f.key}.png" alt=""></div>`;
+  return left+right;
+}
+
+function setHeader(icon,kick,sub){document.getElementById('kIcon').textContent=icon;
+  document.getElementById('kText').textContent=kick;document.getElementById('subtitle').textContent=sub;}
+
+function clearAll(){
+  body.classList.remove('up'); document.querySelector('.header').classList.remove('up');
+  FLOORS.forEach(f=>{
+    if(f.key===CURRENT) return;
+    rows[f.key].className='floor'; rows[f.key].style.top=f.y+'px';
+    rows[f.key].innerHTML=floorInner(f,'idle');
+    rows[f.key].onclick=()=>onFloor(f);
+  });
+  cabinA.className='cabin l'; cabinB.className='cabin r';
+  cabinA.style.top=(center('nature')-32)+'px';
+  cabinB.style.top=(center('face')-32)+'px';
+}
+
+function assignCabin(targetKey, board){
+  const tf=FLOORS.find(x=>x.key===targetKey);
+  const up = tf.n > FLOORS.find(x=>x.key===CURRENT).n;
+  const lift = (Math.abs(tf.n)%2===0)?'B':'A';
+  lastLift[targetKey]=lift;
+  const cabin = lift==='A'?cabinA:cabinB;
+  cabin.className='cabin '+(lift==='A'?'l':'r')+' on'+(board?' board':'');
+  cabin.style.top=(center(CURRENT)-(board?60:54))+'px';
+  cabin.querySelector('.ar').textContent=up?'arrow_upward':'arrow_downward';
+  return {up,lift,name:tf.name};
+}
+
+function onFloor(f){
+  if(selKey===f.key){ board(f); return; }   // second tap = board
+  selectFloor(f.key,false);
+}
+
+function selectFloor(key,asBoard){
+  stopCd(); document.getElementById('tricsy').classList.remove('show');
+  clearAll(); selKey=key;
+  FLOORS.forEach(o=>{ if(o.key!==CURRENT && o.key!==key) rows[o.key].classList.add('dim'); });
+  const f=FLOORS.find(x=>x.key===key);
+  rows[key].className='floor sel'; rows[key].innerHTML=floorInner(f,'sel');
+  rows[key].onclick=()=>board(f);
+  const a=assignCabin(key, asBoard);
+  // strip
+  const strip=document.getElementById('strip');
+  document.getElementById('sBadge').innerHTML = a.lift==='A'
+    ? `<span class="material-symbols-rounded">arrow_back</span>A`
+    : `B<span class="material-symbols-rounded">arrow_forward</span>`;
+  document.getElementById('sCancel').style.display = asBoard?'none':'';
+  strip.className='strip show'+(asBoard?' board':'');
+  if(asBoard){
+    document.getElementById('sTitle').textContent=`Enter Lift ${a.lift} now`;
+    document.getElementById('sSub').textContent=`Doors are open · going ${a.up?'up':'down'} to ${a.name}`;
+    setBar('sBar',100,0);
+    setHeader('door_open','DOORS OPENING',`Enter Lift ${a.lift} — going ${a.up?'up':'down'} to ${a.name}`);
+  }else{
+    document.getElementById('sTitle').textContent=`Lift ${a.lift} is on the way`;
+    document.getElementById('sSub').textContent=`Going ${a.up?'up':'down'} to ${a.name} · board when doors open`;
+    setBar('sBar',100,6);
+    setHeader('check_circle','DESTINATION SET',`Lift ${a.lift} assigned · going ${a.up?'up':'down'} to ${a.name}`);
+  }
+}
+function board(f){ selectFloor(f.key,true); }
+
+function setBar(id,to,sec){const b=document.getElementById(id);b.style.transition='none';b.style.width='8%';
+  requestAnimationFrame(()=>{b.style.transition=`width ${sec}s linear`;b.style.width=to+'%';});}
+
+/* ---- Tricsy ---- */
+function showTricsy(key,badge,title,reason,tagMode,secs){
+  reset(true); recKey=key;
+  body.classList.add('up'); document.querySelector('.header').classList.add('up');
+  document.getElementById('strip').classList.remove('show');
+  document.getElementById('tBadge').textContent=badge;
+  document.getElementById('tTitle').textContent=title;
+  document.getElementById('tReason').textContent=reason;
+  FLOORS.forEach(o=>{ if(o.key!==CURRENT && o.key!==key) rows[o.key].classList.add('dim'); });
+  const f=FLOORS.find(x=>x.key===key);
+  rows[key].className='floor rec'; rows[key].innerHTML=floorInner(f,tagMode); rows[key].onclick=()=>acceptTricsy();
+  assignCabin(key,false);
+  const sub = tagMode==='car' ? 'End of day — Tricsy is taking you home' : 'Meeting starting soon — Tricsy set your route';
+  setHeader('auto_awesome','TRICSY SUGGESTS',sub);
+  document.getElementById('tricsy').classList.add('show');
+  startCd(secs);
+}
+function startCd(secs){stopCd();const bar=document.getElementById('tBar'),cd=document.getElementById('cdText');let left=secs;
+  bar.style.transition='none';bar.style.width='0%';
+  requestAnimationFrame(()=>{bar.style.transition=`width ${secs}s linear`;bar.style.width='100%';});
+  const tick=()=>{cd.textContent=`Auto-accept in 0:${String(left).padStart(2,'0')}`;if(left<=0){stopCd();acceptTricsy();return;}left--;};
+  tick();cdTimer=setInterval(tick,1000);}
+function stopCd(){if(cdTimer){clearInterval(cdTimer);cdTimer=null;}}
+function acceptTricsy(){const k=recKey;if(k){document.getElementById('tricsy').classList.remove('show');selectFloor(k,false);}}
+function tricsyMeeting(){showTricsy('finger','1','Take FINGER · Floor 1','Meeting “Tricsy – UX update” starts in 8 min','meeting',8);}
+function tricsyHome(){showTricsy('parking','-1','Head home · Take PARKING','After 17:00 · your car is waiting in the garage','car',6);}
+
+function reset(keepRec){
+  stopCd(); if(!keepRec) recKey=null; selKey=null;
+  clearAll();
+  document.getElementById('strip').classList.remove('show','board');
+  document.getElementById('tricsy').classList.remove('show');
+  setHeader('my_location','YOU ARE HERE','Select your destination floor');
+}
+clearAll();
+
+/* clock */
+function tickClock(){const d=new Date();document.getElementById('clock').textContent=
+  String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+tickClock();setInterval(tickClock,1000);
+
+/* fit 1080x1920 to viewport */
+function fit(){const s=Math.min((window.innerWidth-20)/1080,(window.innerHeight-150)/1920);
+  const w=document.getElementById('wrap');w.style.transform=`scale(${s})`;w.style.height=(1920*s)+'px';}
+fit();window.addEventListener('resize',fit);
+</script>
+</body>
+</html>
