@@ -729,6 +729,7 @@
       </div>
     </div>
     <style id="demo-css">
+      :root{ --eo:cubic-bezier(.23,1,.32,1); --eio:cubic-bezier(.77,0,.175,1); }   /* strong custom easings */
       html,body{ background:#000; margin:0; height:100%; overflow:hidden; }
       /* distribute the top-bar pills evenly across the full width:
          dissolve the tbLeft wrapper so all 4 pills are direct flex children, then space-between */
@@ -740,10 +741,14 @@
       [data-pencil-id="NINQz"],[data-pencil-id="OU5E9"]{ color:#FFFFFF !important; }
       /* Pencil's space_between min-gap exports as a literal CSS gap that overflows — let space-between distribute */
       [data-pencil-name="f3"],[data-pencil-name="f2"],[data-pencil-name="f1"],[data-pencil-name="f0"],[data-pencil-name="fm1"]{
-        gap:0 !important; cursor:pointer;
-        transition:background-color .35s, background-image .35s, box-shadow .35s, border-color .35s, opacity .35s !important;
+        gap:0 !important; cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+        transition:background-color .3s ease, background-image .3s ease, box-shadow .3s ease, border-color .3s ease, opacity .3s ease, transform .12s var(--eo) !important;
       }
-      [data-pencil-name="f3"]:hover,[data-pencil-name="f2"]:hover,[data-pencil-name="f1"]:hover,[data-pencil-name="f0"]:hover,[data-pencil-name="fm1"]:hover{ filter:brightness(1.12); }
+      /* touch panel: tap feedback (press), not hover */
+      [data-pencil-name="f3"]:active,[data-pencil-name="f2"]:active,[data-pencil-name="f1"]:active,[data-pencil-name="f0"]:active,[data-pencil-name="fm1"]:active{ transform:scale(.985); }
+      @media (hover:hover) and (pointer:fine){   /* desktop testing only — off on the touch screen */
+        [data-pencil-name="f3"]:hover,[data-pencil-name="f2"]:hover,[data-pencil-name="f1"]:hover,[data-pencil-name="f0"]:hover,[data-pencil-name="fm1"]:hover{ filter:brightness(1.1); }
+      }
       [data-pencil-name="carTag"],[data-pencil-name="youHereTag"]{ display:none !important; }
       /* hero-overflow trick: tHead (853px) is meant to overflow OVER the mascot, not push it out */
       [data-pencil-id="gtbvI"]{ flex:0 0 600px !important; width:600px !important; min-width:0 !important; overflow:visible !important; }
@@ -759,11 +764,26 @@
       .tc-body{ display:flex; flex-direction:row; align-items:center; gap:24px; height:112px; width:100%; }
       .tc-circles{ position:relative; height:75px; flex-shrink:0; }
       .tc-circle{ position:absolute; top:0; width:75px; height:75px; border-radius:48px; display:flex; align-items:center; justify-content:center;
-                  background-image:linear-gradient(-90deg,#3B82F6,#1D4ED8); box-shadow:0 0 26px #2563EBAA; color:#fff; font:700 44px Montserrat,system-ui,sans-serif; }
+                  background-image:linear-gradient(-90deg,#3B82F6,#1D4ED8); box-shadow:0 0 26px #2563EBAA; color:#fff; font:700 44px Montserrat,system-ui,sans-serif;
+                  transition:left .38s var(--eio), transform .26s var(--eo), opacity .2s var(--eo); }
+      @starting-style{ .tc-circle{ transform:scale(.7); opacity:0; } }   /* each new circle scales+fades in (never from scale 0) */
+      .tc-circle.leaving{ transform:scale(.6); opacity:0; }              /* removed floor fades out */
+      .tc-txt{ transition:opacity .18s var(--eo), filter .18s var(--eo); }
       .tc-txt{ display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
       .tc-title{ color:#FFFFFF; font:700 34px Montserrat,system-ui,sans-serif; white-space:nowrap; }
       .tc-sub{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
       .tc-mascot{ position:absolute; left:623px; top:26px; width:261px; height:306px; background:url('floor-names/tricsy3.png') center/contain no-repeat; z-index:1; }
+      /* reduced motion: keep colour/opacity, drop movement & scale */
+      @media (prefers-reduced-motion: reduce){
+        [data-pencil-name="cabin"]{ transition:background-color .3s, background-image .3s, border-color .3s, box-shadow .3s !important; }
+        [data-pencil-name="f3"]:active,[data-pencil-name="f2"]:active,[data-pencil-name="f1"]:active,[data-pencil-name="f0"]:active,[data-pencil-name="fm1"]:active{ transform:none; }
+        .tc-circle{ transition:opacity .16s ease, left .16s ease !important; }
+        @starting-style{ .tc-circle{ transform:none; opacity:0; } }
+        .tc-circle.leaving{ transform:none; opacity:0; }
+        .tc-txt{ filter:none !important; }
+        [data-pencil-name="f3"]::before,[data-pencil-name="f2"]::before,[data-pencil-name="f1"]::before,[data-pencil-name="f0"]::before,[data-pencil-name="fm1"]::before{ transition:none !important; }
+        .dsel.pulsing::after, [data-pencil-name="trail"]{ animation:none !important; }
+      }
       [data-pencil-id="gtbvI"]{ gap:34px !important; }      /* between head · body · progress · actions */
       [data-pencil-id="wpS7Q"]{ gap:26px !important; }      /* badge ↔ title/reason */
       [data-pencil-id="oBDGQ"]{ gap:10px !important; }      /* title ↔ reason (tight pair) */
@@ -778,7 +798,23 @@
       .dcur{ background-image:none !important; background-color:#101319 !important; border:1px solid #23262F !important; box-shadow:none !important; opacity:.5 !important; cursor:default; }
       .dcur [data-pencil-name="num"]{ color:#6B7280 !important; }
       .dcur [data-pencil-name="trail"]{ opacity:.5 !important; }
-      .dsel{ background-image:linear-gradient(-90deg,#3B82F6 0%,#1D4ED8 100%) !important; background-color:transparent !important; border:2px solid #60A5FA !important; box-shadow:0 0 40px #2563EB66 !important; opacity:1 !important; }
+      .dsel{ background-image:none !important; background-color:#1B2230 !important; border:2px solid #60A5FA !important; box-shadow:0 0 40px #2563EB66 !important; opacity:1 !important; }
+      /* blue pours in left → right like a quick progress bar */
+      [data-pencil-name="f3"]::before,[data-pencil-name="f2"]::before,[data-pencil-name="f1"]::before,[data-pencil-name="f0"]::before,[data-pencil-name="fm1"]::before{
+        content:''; position:absolute; inset:0; border-radius:60px; pointer-events:none; z-index:0;
+        background-image:linear-gradient(-90deg,#3B82F6 0%,#1D4ED8 100%);
+        clip-path:inset(0 100% 0 0 round 60px); transition:clip-path .32s var(--eo);
+      }
+      .dsel::before{ clip-path:inset(0 0 0 0 round 60px) !important; }
+      [data-pencil-name="f3"]>*,[data-pencil-name="f2"]>*,[data-pencil-name="f1"]>*,[data-pencil-name="f0"]>*,[data-pencil-name="fm1"]>*{ position:relative; z-index:1; }
+      /* soft glow behind a selected floor; pulses while its lift is en route, then settles */
+      .dsel::after{ content:''; position:absolute; inset:-3px; border-radius:62px; pointer-events:none; z-index:0;
+                    box-shadow:0 0 48px 8px rgba(59,130,246,.5); opacity:.5; }
+      .dsel.pulsing::after{ animation:glowPulse 1.25s var(--eio) infinite; }
+      @keyframes glowPulse{ 0%,100%{ opacity:.28; } 50%{ opacity:.95; } }
+      /* the floor's 3-dot mark spins one full turn about its true centroid on every interaction (origin set per-floor in JS) */
+      [data-pencil-name="trail"]{ will-change:transform; overflow:visible; }
+      @keyframes spin360{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
       .dsel [data-pencil-name="badge"]{ background-color:#FFFFFF !important; }
       .dsel [data-pencil-name="num"]{ color:#1D4ED8 !important; }
       .dsel [data-pencil-name="trail"]{ filter:brightness(0) invert(1) !important; opacity:1 !important; }
@@ -823,7 +859,10 @@
       ];
       const byIdx = i => FLOORS.find(f=>f.idx===i);
       const cabinTop = i => i*160 + 22;        // 0=NATURE (top) … 4=PARKING (bottom)
-      const TR = 'top 1s cubic-bezier(.5,.05,.2,1), background-color .45s, background-image .45s, border-color .45s, box-shadow .45s';
+      // cabin travel = real KONE low-rise speed (~1.6 m/s nominal, ~3.5 m floor-to-floor) + accel/decel overhead
+      const LIFT_MPS=1.6, FLOOR_M=3.5, ACCEL_S=0.9;
+      const travelSec = fl => fl ? +(ACCEL_S + fl*FLOOR_M/LIFT_MPS).toFixed(2) : 0;   // duration ∝ floors travelled
+      const CTR = 'background-color .4s ease, background-image .4s ease, border-color .4s ease, box-shadow .4s ease';
 
       // lifts — left idles at NATURE(0), right idles at PARKING(4); both passive by default
       const Llift = $('[data-pencil-id="zGHxJ"]');   // left  (-20px)
@@ -837,7 +876,13 @@
       }
       const L = { el:Llift, cab:Lcab, dir:ensureDir(Lcab), home:0, label:'A' };
       const R = { el:Rlift, cab:Rcab, dir:ensureDir(Rcab), home:4, label:'B' };
-      [Lcab,Rcab].forEach(c=> c.style.transition = TR);
+      [Lcab,Rcab].forEach(c=> c.style.transition = CTR);
+      function moveCab(o, toIdx){                         // drive the cabin; top duration ∝ floors → real-time position
+        const fl = Math.abs((o.at ?? o.home) - toIdx), t = travelSec(fl);
+        o.cab.style.transition = 'top '+t+'s var(--eio), '+CTR;
+        o.cab.style.top = cabinTop(toIdx)+'px';
+        o.at = toIdx; return t;
+      }
 
       // every pill needs a trail dot-mark (f3 had "you are here", fm1 had "your car")
       function ensureTrail(p, key){
@@ -848,6 +893,10 @@
         p.appendChild(t);
       }
       ensureTrail(pill('f3'),'nature'); ensureTrail(pill('fm1'),'parking');
+      // spin the dot-mark like a wheel about its real centroid (alpha-weighted) on every interaction
+      const DOT_ORIGIN={ nature:'41.5% 49.9%', face:'44.5% 54.6%', finger:'38% 55.6%', hub:'41.5% 49.9%', parking:'49.6% 50.8%' };
+      FLOORS.forEach(f=>{ const t=pill(f.name).querySelector('[data-pencil-name="trail"]'); if(t) t.style.transformOrigin=DOT_ORIGIN[f.key]; });
+      function spinTrail(p){ const t=p.querySelector('[data-pencil-name="trail"]'); if(!t) return; t.style.animation='none'; void t.offsetWidth; t.style.animation='spin360 .75s var(--eio)'; }
 
       const wm=$('[data-pencil-name="titleWordmark"]'), kick=$('[data-pencil-name="hKickTx"]'), sub=$('[data-pencil-name="hSub"]');
       const card=$('[data-pencil-id="Y57i4u"]');
@@ -872,9 +921,9 @@
       }
       fixTimeline(Llift); fixTimeline(Rlift);
 
-      let curIdx=null, upLift=null, downLift=null;   // upLift/downLift persist → stable assignment (no arrow flip)
+      let curIdx=null, upLift=null, downLift=null, pulseT=null;   // upLift/downLift persist → stable assignment (no arrow flip)
       const dests=new Set();
-      const setPill=(f,cls)=>{ const e=pill(f.name); e.classList.remove('dnor','dcur','dsel'); e.classList.add(cls); };
+      const setPill=(f,cls)=>{ const e=pill(f.name); e.classList.remove('dnor','dcur','dsel','pulsing'); e.classList.add(cls); };
       const setLift=(o,on,up)=>{ o.el.classList.remove('la','lp'); o.el.classList.add(on?'la':'lp'); if(on) o.dir.classList.toggle('dir-up',up); };
       const setWordmark=f=>{ wm.style.opacity='1'; wm.style.backgroundImage="url('floor-names/"+f.key+"_s.png')"; };
 
@@ -886,20 +935,27 @@
             '<div class="tc-txt"><div class="tc-title" id="tcTitle"></div><div class="tc-sub" id="tcSub"></div></div></div>'+
         '</div>'+
         '<div class="tc-mascot"></div>';
-      const tcCircles=$('#tcCircles'), tcTitle=$('#tcTitle'), tcSub=$('#tcSub');
-      const STEP=54;   // circle overlap step (px), first-pressed sits left + on top
+      const tcCircles=$('#tcCircles'), tcTitle=$('#tcTitle'), tcSub=$('#tcSub'), tcTxt=$('.tc-txt');
+      const STEP=54;            // circle overlap step (px), first-pressed sits left + on top
+      const circleMap=new Map();
+      let txtT=null;
+      function setTxt(t,s){     // blur-masked crossfade on title/sub change
+        if(tcTitle.textContent===t && tcSub.textContent===s) return;
+        tcTxt.style.opacity='0'; tcTxt.style.filter='blur(3px)'; clearTimeout(txtT);
+        txtT=setTimeout(()=>{ tcTitle.textContent=t; tcSub.textContent=s; tcTxt.style.opacity='1'; tcTxt.style.filter='blur(0)'; },110);
+      }
       function renderStops(){
         const arr=[...dests];
-        tcCircles.innerHTML='';
-        tcCircles.style.width = arr.length ? ((arr.length-1)*STEP+75)+'px' : '0px';
-        arr.forEach((idx,i)=>{
-          const c=document.createElement('div'); c.className='tc-circle';
-          c.style.left=(i*STEP)+'px'; c.style.zIndex=String(100-i);
-          c.textContent=byIdx(idx).n; tcCircles.appendChild(c);
+        circleMap.forEach((el,idx)=>{ if(!dests.has(idx)){ el.classList.add('leaving'); setTimeout(()=>el.remove(),300); circleMap.delete(idx); } });
+        arr.forEach((idx,i)=>{   // add new (scales in via @starting-style), reposition existing (left transitions)
+          let el=circleMap.get(idx);
+          if(!el){ el=document.createElement('div'); el.className='tc-circle'; el.textContent=byIdx(idx).n; tcCircles.appendChild(el); circleMap.set(idx,el); }
+          el.style.left=(i*STEP)+'px'; el.style.zIndex=String(100-i);
         });
-        if(arr.length===0){ tcTitle.textContent='Hi! Where can I take you?'; tcSub.textContent='Elevators coming'; }
-        else if(arr.length===1){ const f=byIdx(arr[0]); tcTitle.textContent='Take '+f.key.toUpperCase()+' · Floor '+f.n; tcSub.textContent='Your destination'; }
-        else { tcTitle.textContent='Lift is coming'; tcSub.textContent='Have a nice day'; }
+        tcCircles.style.width = arr.length ? ((arr.length-1)*STEP+75)+'px' : '0px';
+        if(arr.length===0) setTxt('Hi! Where can I take you?','Elevators coming');
+        else if(arr.length===1){ const f=byIdx(arr[0]); setTxt('Take '+f.key.toUpperCase()+' · Floor '+f.n,'Your destination'); }
+        else setTxt('Lift is coming','Have a nice day');
       }
 
       // dispatch + UI for the current set of destinations (multi-select)
@@ -911,11 +967,20 @@
         const nearest=(Math.abs(curIdx-L.home)<=Math.abs(curIdx-R.home))?L:R;
         if(up.length   && !upLift)   upLift   = (downLift===L)?R : (downLift===R)?L : nearest;
         if(down.length && !downLift) downLift = (upLift===L)?R   : (upLift===R)?L   : nearest;
+        let maxT=0;
         [L,R].forEach(o=>{
-          if(o===upLift){ setLift(o,true,true);  o.cab.style.top=cabinTop(curIdx)+'px'; }
-          else if(o===downLift){ setLift(o,true,false); o.cab.style.top=cabinTop(curIdx)+'px'; }
-          else { setLift(o,false); o.cab.style.top=cabinTop(o.home)+'px'; }   // unused lift idles back home
+          if(o===upLift){ setLift(o,true,true);  maxT=Math.max(maxT,moveCab(o,curIdx)); }
+          else if(o===downLift){ setLift(o,true,false); maxT=Math.max(maxT,moveCab(o,curIdx)); }
+          else { setLift(o,false); moveCab(o,o.home); }   // unused lift idles back home
         });
+        // pulse the selected floors' glow while the lift is travelling; settle when it arrives
+        const selPills=[...dests].map(i=>pill(byIdx(i).name));
+        if(maxT>0){
+          clearTimeout(pulseT);
+          document.querySelectorAll('.pulsing').forEach(p=>p.classList.remove('pulsing'));
+          selPills.forEach(p=>p.classList.add('pulsing'));
+          pulseT=setTimeout(()=>{ document.querySelectorAll('.pulsing').forEach(p=>p.classList.remove('pulsing')); pulseT=null; }, maxT*1000);
+        } else if(pulseT){ selPills.forEach(p=>p.classList.add('pulsing')); }
         setWordmark(byIdx(curIdx));
         renderStops();
         if(dests.size===0){ kick.textContent='YOU ARE HERE'; sub.textContent='Step 2 · tap your destination'; return; }
@@ -924,28 +989,30 @@
         sub.textContent=dests.size+' floor'+(dests.size>1?'s':'')+' · '+parts.join(', ');
       }
 
-      function onClick(f){
+      function onClick(f, e){
+        spinTrail(pill(f.name));     // dot-mark spins on every interaction
         if(curIdx===null){ curIdx=f.idx; setPill(f,'dcur'); setWordmark(f);
           kick.textContent='YOU ARE HERE'; sub.textContent='Step 2 · tap your destination'; return; }   // step 1 = where I am
         if(f.idx===curIdx) return;                                              // can't ride to my own floor
         if(dests.has(f.idx)){ dests.delete(f.idx); setPill(f,'dnor'); }         // multi-select: toggle destination
-        else { dests.add(f.idx); setPill(f,'dsel'); }
+        else { dests.add(f.idx); setPill(f,'dsel'); }                           // blue fills left→right via .dsel::before
         route();
       }
 
       function reset(){
-        curIdx=null; upLift=null; downLift=null; dests.clear();
+        curIdx=null; upLift=null; downLift=null; dests.clear(); clearTimeout(pulseT); pulseT=null;
         FLOORS.forEach(f=>setPill(f,'dnor'));
         setLift(L,false); setLift(R,false);
         Lcab.style.transition=Rcab.style.transition='none';
         Lcab.style.top=cabinTop(L.home)+'px'; Rcab.style.top=cabinTop(R.home)+'px';
+        L.at=L.home; R.at=R.home;
         Lcab.getBoundingClientRect();
-        Lcab.style.transition=Rcab.style.transition=TR;
+        Lcab.style.transition=Rcab.style.transition=CTR;
         renderStops();
         kick.textContent='STEP 1 · YOUR FLOOR'; sub.textContent='Tap the floor you are on'; wm.style.opacity='0';
       }
 
-      FLOORS.forEach(f=> pill(f.name).addEventListener('click', ()=>onClick(f)) );
+      FLOORS.forEach(f=> pill(f.name).addEventListener('click', e=>onClick(f,e)) );
       $('#dreset').addEventListener('click', reset);
       reset();
 
