@@ -834,6 +834,9 @@
       .lp [data-pencil-name="cabin"] [data-pencil-name="ic"] path{ fill:#3D4654 !important; }
       .lp [data-pencil-name="dir"]{ opacity:0 !important; }
       .dir-up{ transform:rotate(180deg) !important; }
+      /* station ring fills blue where the active cabin will stop (its served destinations) */
+      [data-pencil-name="station"].stop{ background-color:#2F6BF0 !important; background-image:none !important; outline-color:#93C5FD !important;
+        box-shadow:0 0 14px 3px rgba(37,99,235,.9); transition:background-color .4s var(--eo), outline-color .4s, box-shadow .4s !important; }
 
       /* auto-accept disabled — set when the user taps any floor (manual override) */
       [data-pencil-name="tCountdown"],[data-pencil-name="cdTx"],[data-pencil-name="tTrack"]{ transition:background-color .35s, border-color .35s, color .35s, opacity .35s; }
@@ -912,14 +915,16 @@
         const rail = lift.querySelector('[data-pencil-name="rail"]');
         rail.style.left='57.5px'; rail.style.width='5px'; rail.style.top='76px'; rail.style.height='650px';
         const cab = lift.querySelector('[data-pencil-name="cabin"]');
-        const sts = [...lift.querySelectorAll('[data-pencil-name="station"]')];
+        const sts = [...lift.querySelectorAll('[data-pencil-name="station"]')], out=[];
         for(let i=0;i<5;i++){
           let s = sts[i];
           if(!s){ s = sts[0].cloneNode(true); lift.insertBefore(s, cab); }   // add the missing top station
           s.style.left='50px'; s.style.top=(i*160+76)+'px';                  // align rings with cabin stops
+          out[i]=s;
         }
+        return out;                                                          // stations indexed by floor
       }
-      fixTimeline(Llift); fixTimeline(Rlift);
+      L.stations=fixTimeline(Llift); R.stations=fixTimeline(Rlift);
 
       let curIdx=null, upLift=null, downLift=null, pulseT=null;   // upLift/downLift persist → stable assignment (no arrow flip)
       const dests=new Set();
@@ -973,6 +978,10 @@
           else if(o===downLift){ setLift(o,true,false); maxT=Math.max(maxT,moveCab(o,curIdx)); }
           else { setLift(o,false); moveCab(o,o.home); }   // unused lift idles back home
         });
+        // blue stop-rings = floors each active cabin will stop at (its served destinations)
+        [L,R].forEach(o=> o.stations.forEach(s=>s.classList.remove('stop')));
+        up.forEach(i=>{ if(upLift) upLift.stations[i].classList.add('stop'); });
+        down.forEach(i=>{ if(downLift) downLift.stations[i].classList.add('stop'); });
         // pulse the selected floors' glow while the lift is travelling; settle when it arrives
         const selPills=[...dests].map(i=>pill(byIdx(i).name));
         if(maxT>0){
@@ -1001,6 +1010,7 @@
 
       function reset(){
         curIdx=null; upLift=null; downLift=null; dests.clear(); clearTimeout(pulseT); pulseT=null;
+        [L,R].forEach(o=> o.stations && o.stations.forEach(s=>s.classList.remove('stop')));
         FLOORS.forEach(f=>setPill(f,'dnor'));
         setLift(L,false); setLift(R,false);
         Lcab.style.transition=Rcab.style.transition='none';
