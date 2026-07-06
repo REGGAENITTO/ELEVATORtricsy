@@ -873,6 +873,13 @@
       .lp .cab-door{ background-color:#12161F; }
       .lp .cab-door-l{ box-shadow:inset -1px 0 0 #2C3340; }
       .lp .cab-door-r{ box-shadow:inset 1px 0 0 #2C3340; }
+      /* lit blue glow filling the closed cabin while it travels to the destination; hands off to the interior glow on open */
+      .cab-glow{ position:absolute; inset:0; z-index:2; opacity:0; pointer-events:none;
+        background:radial-gradient(62% 56% at 50% 46%, rgba(83,150,255,.6) 0%, rgba(83,150,255,0) 70%);
+        transition:opacity .45s ease; }
+      .la [data-pencil-name="cabin"] .cab-glow{ opacity:1; }
+      .la [data-pencil-name="cabin"].cab-open .cab-glow{ opacity:0; }
+      .lp [data-pencil-name="cabin"] .cab-glow{ opacity:0; }
       /* centred direction arrow ON the closed doors (z above doors); shows where the lift will go, fades out when the doors open */
       .cab-cdir{ position:absolute; left:30px; top:42px; width:32px; height:44px; z-index:3; opacity:0; pointer-events:none;
         transition:opacity .3s ease; filter:drop-shadow(0 0 6px rgba(120,170,255,.65)); }
@@ -931,10 +938,12 @@
         const inner=document.createElement('div'); inner.className='cab-inner'; inner.innerHTML=CAB_INNER;
         const dl=document.createElement('div'); dl.className='cab-door cab-door-l';
         const dr=document.createElement('div'); dr.className='cab-door cab-door-r';
+        // soft blue glow on the closed cabin so it reads as lit/active while travelling to the destination
+        const glow=document.createElement('div'); glow.className='cab-glow';
         // centred direction arrow shown ON the closed doors (in front) — tells you where the lift will go until it opens
         const cdir=document.createElement('div'); cdir.className='cab-cdir';
         cdir.innerHTML='<svg viewBox="0 0 23.9 35.24" preserveAspectRatio="xMidYMid meet"><path fill="#EAF1FF" d="'+ARROW_PATH+'"/></svg>';
-        cab.append(inner, dl, dr, cdir);
+        cab.append(inner, dl, dr, glow, cdir);
         o.doorL=dl; o.doorR=dr; o.cdir=cdir;
         o.dir=inner.querySelector('[data-pencil-name="dir"]');   // direction arrow now lives inside; existing dir-up toggle still applies
         o.servingTo=null;
