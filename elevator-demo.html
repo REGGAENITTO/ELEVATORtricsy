@@ -825,7 +825,9 @@
       [data-pencil-name="ic"] path{ transition:fill .45s; }
       .la [data-pencil-name="rail"]{ background-image:linear-gradient(-90deg,#4C8DF5 0%,#15233B 100%) !important; }
       .la [data-pencil-name="station"]{ background-color:#0A1120 !important; outline-color:#3C5A7C !important; }
-      .la [data-pencil-name="cabin"]{ background-image:linear-gradient(-90deg,#4D8BF6 0%,#1D4ED8 100%) !important; border-color:#84B4FF !important; box-shadow:0 0 42px 3px #2563EBCC !important; }
+      [data-pencil-name="cabin"]{ transition:box-shadow .5s var(--eo) !important; }
+      .la [data-pencil-name="cabin"]{ background-image:none !important; background-color:#080B13 !important; border-color:#84B4FF !important; box-shadow:0 0 16px 1px #2563EB55 !important; }
+      .la [data-pencil-name="cabin"].cab-open{ box-shadow:0 0 42px 3px #2563EBCC !important; }
       .la [data-pencil-name="cabin"] [data-pencil-name="ic"] path{ fill:#FFFFFF !important; }
       .la [data-pencil-name="dir"]{ opacity:1 !important; }
       .lp [data-pencil-name="rail"]{ background-image:none !important; background-color:#1B222E !important; }
@@ -849,27 +851,26 @@
                border-radius:26px; padding:13px 24px; cursor:pointer; }
       #dreset:hover{ background:#1c2030; color:#fff; }
 
-      /* === door-open reveal: closed cabin = two panels + centre seam; on arrival they slide apart → man+woman+arrow === */
+      /* === door-open reveal: closed cabin = bare neon outline (dark doors, unlit); on arrival the dark doors
+             part from the centre and reveal the blue interior — gradient + man/woman + direction arrow === */
       [data-pencil-name="cabin"]{ overflow:hidden; }
-      .cab-inner{ position:absolute; inset:0; z-index:0; }
+      .cab-inner{ position:absolute; inset:0; z-index:1; }        /* the lit interior, sits behind the doors */
       .cab-inner svg{ position:absolute; }
       .cab-fig{ opacity:1; }
-      .cab-door{ position:absolute; top:0; height:100%; width:50%; z-index:2; will-change:transform;
-        transition:transform .72s cubic-bezier(.66,0,.2,1); }
+      .la .cab-inner{ background-image:linear-gradient(-90deg,#4D8BF6 0%,#1D4ED8 100%); }
+      .lp .cab-inner{ background-image:none; }
+      .cab-door{ position:absolute; top:0; height:100%; width:50%; z-index:2; will-change:transform; }
       .cab-door-l{ left:0; }
       .cab-door-r{ right:0; }
-      /* active: bright-blue doors, luminous centre seam */
-      .la .cab-door{ background-image:linear-gradient(-90deg,#4D8BF6 0%,#1D4ED8 100%); }
-      .la .cab-door-l{ box-shadow:inset -1.5px 0 0 rgba(190,215,255,.55); }
-      .la .cab-door-r{ box-shadow:inset 1.5px 0 0 rgba(190,215,255,.55); }
-      /* passive: dim graphite doors */
-      .lp .cab-door{ background-color:#161B24; }
+      /* doors = the dark cabin front; only the neon outline + centre seam read while closed.
+         The slide itself is driven by the Web Animations API (compositor transform) so it never
+         freezes when the tab is throttled — see slideDoors() in the script. */
+      .la .cab-door{ background-color:#080B13; }
+      .la .cab-door-l{ box-shadow:inset -1.5px 0 0 rgba(146,197,253,.6); }
+      .la .cab-door-r{ box-shadow:inset 1.5px 0 0 rgba(146,197,253,.6); }
+      .lp .cab-door{ background-color:#12161F; }
       .lp .cab-door-l{ box-shadow:inset -1px 0 0 #2C3340; }
       .lp .cab-door-r{ box-shadow:inset 1px 0 0 #2C3340; }
-      /* arrived → doors part */
-      .cab-open .cab-door-l{ transform:translateX(-101%); }
-      .cab-open .cab-door-r{ transform:translateX(101%); }
-      @media (prefers-reduced-motion: reduce){ .cab-door{ transition:transform .01s !important; } }
     </style>
     <button id="dreset">↺ Reset</button>
     <script>
@@ -921,11 +922,21 @@
         const dl=document.createElement('div'); dl.className='cab-door cab-door-l';
         const dr=document.createElement('div'); dr.className='cab-door cab-door-r';
         cab.append(inner, dl, dr);
+        o.doorL=dl; o.doorR=dr;
         o.dir=inner.querySelector('[data-pencil-name="dir"]');   // direction arrow now lives inside; existing dir-up toggle still applies
         o.servingTo=null;
       }
-      const openDoors  = o => { o.cab.classList.add('cab-open');    o.doorsOpen=true;  };
-      const closeDoors = o => { o.cab.classList.remove('cab-open'); o.doorsOpen=false; };
+      // slide the two dark doors apart / together via WAAPI (compositor transform → animates even when throttled)
+      const DOOR_ANIM={duration:720, easing:'cubic-bezier(.66,0,.2,1)', fill:'forwards'};
+      function slideDoors(o, open){
+        if(!o.doorL) return;
+        const lTo=open?'translateX(-101%)':'translateX(0)', rTo=open?'translateX(101%)':'translateX(0)';
+        o.doorL.animate([{transform:o._dl||'translateX(0)'},{transform:lTo}], DOOR_ANIM);
+        o.doorR.animate([{transform:o._dr||'translateX(0)'},{transform:rTo}], DOOR_ANIM);
+        o._dl=lTo; o._dr=rTo;
+      }
+      const openDoors  = o => { o.cab.classList.add('cab-open');    o.doorsOpen=true;  slideDoors(o,true);  };
+      const closeDoors = o => { o.cab.classList.remove('cab-open'); o.doorsOpen=false; slideDoors(o,false); };
       [L,R].forEach(buildCabin);
 
       function moveCab(o, toIdx){                         // drive the cabin; top duration ∝ floors → real-time position
