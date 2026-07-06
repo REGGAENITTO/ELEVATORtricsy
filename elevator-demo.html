@@ -873,6 +873,13 @@
       .lp .cab-door{ background-color:#12161F; }
       .lp .cab-door-l{ box-shadow:inset -1px 0 0 #2C3340; }
       .lp .cab-door-r{ box-shadow:inset 1px 0 0 #2C3340; }
+      /* centred direction arrow ON the closed doors (z above doors); shows where the lift will go, fades out when the doors open */
+      .cab-cdir{ position:absolute; left:30px; top:42px; width:32px; height:44px; z-index:3; opacity:0; pointer-events:none;
+        transition:opacity .3s ease; filter:drop-shadow(0 0 6px rgba(120,170,255,.65)); }
+      .cab-cdir svg{ width:100%; height:100%; display:block; }
+      .la [data-pencil-name="cabin"] .cab-cdir{ opacity:1; }                 /* active + closed → show onward direction */
+      .la [data-pencil-name="cabin"].cab-open .cab-cdir{ opacity:0; }        /* doors open → hide (interior arrow takes over) */
+      .lp [data-pencil-name="cabin"] .cab-cdir{ opacity:0; }
     </style>
     <button id="dreset">↺ Reset</button>
     <script>
@@ -907,9 +914,10 @@
       [Lcab,Rcab].forEach(c=> c.style.transition = CTR);
 
       // --- cabin interior revealed when the doors open: direction arrow + man & woman (Jakub's SVG from figures/) ---
+      const ARROW_PATH='M23.62,16.74L13.49.84c-.34-.53-.91-.84-1.54-.84s-1.2.32-1.54.84L.29,16.74c-.19.29-.29.63-.29.98,0,.63.32,1.2.85,1.54.41.26.9.35,1.38.24.48-.11.88-.39,1.15-.8l6.76-10.61v25.32c0,1.01.82,1.83,1.83,1.83s1.83-.82,1.83-1.83V8.09l6.76,10.61c.26.41.67.7,1.15.8.48.11.97.02,1.38-.24.85-.54,1.1-1.67.56-2.52Z';
       const CAB_INNER =
         '<svg data-pencil-name="dir" viewBox="0 0 23.9 35.24" preserveAspectRatio="xMidYMid meet" style="left:34px;top:9px;width:24px;height:32px;z-index:1">'+
-          '<path fill="#FFFFFF" d="M23.62,16.74L13.49.84c-.34-.53-.91-.84-1.54-.84s-1.2.32-1.54.84L.29,16.74c-.19.29-.29.63-.29.98,0,.63.32,1.2.85,1.54.41.26.9.35,1.38.24.48-.11.88-.39,1.15-.8l6.76-10.61v25.32c0,1.01.82,1.83,1.83,1.83s1.83-.82,1.83-1.83V8.09l6.76,10.61c.26.41.67.7,1.15.8.48.11.97.02,1.38-.24.85-.54,1.1-1.67.56-2.52Z"/>'+
+          '<path fill="#FFFFFF" d="'+ARROW_PATH+'"/>'+
         '</svg>'+
         '<svg class="cab-fig" data-pencil-name="people" viewBox="0 0 65.29 69.17" preserveAspectRatio="xMidYMid meet" style="left:14px;top:47px;width:64px;height:67px;z-index:0">'+
           '<circle cx="13.87" cy="6.44" r="6.44" fill="#FFFFFF"/>'+
@@ -923,8 +931,11 @@
         const inner=document.createElement('div'); inner.className='cab-inner'; inner.innerHTML=CAB_INNER;
         const dl=document.createElement('div'); dl.className='cab-door cab-door-l';
         const dr=document.createElement('div'); dr.className='cab-door cab-door-r';
-        cab.append(inner, dl, dr);
-        o.doorL=dl; o.doorR=dr;
+        // centred direction arrow shown ON the closed doors (in front) — tells you where the lift will go until it opens
+        const cdir=document.createElement('div'); cdir.className='cab-cdir';
+        cdir.innerHTML='<svg viewBox="0 0 23.9 35.24" preserveAspectRatio="xMidYMid meet"><path fill="#EAF1FF" d="'+ARROW_PATH+'"/></svg>';
+        cab.append(inner, dl, dr, cdir);
+        o.doorL=dl; o.doorR=dr; o.cdir=cdir;
         o.dir=inner.querySelector('[data-pencil-name="dir"]');   // direction arrow now lives inside; existing dir-up toggle still applies
         o.servingTo=null;
       }
@@ -1048,6 +1059,7 @@
           const active = (o===upLift)||(o===downLift);
           if(active){
             setLift(o,true, o===upLift);
+            if(o.cdir) o.cdir.style.transform=(o===upLift)?'rotate(0deg)':'rotate(180deg)';   // point the closed-door arrow the onward way
             if(o.servingTo!==curIdx){                       // fresh dispatch to the pickup floor
               clearTimeout(o.doorT); o.doorT=null; closeDoors(o);
               const t=moveCab(o,curIdx); o.servingTo=curIdx; maxT=Math.max(maxT,t);
