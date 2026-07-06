@@ -821,11 +821,14 @@
 
       /* lift states: active (blue, glowing) / passive (ambient) */
       [data-pencil-name="rail"],[data-pencil-name="station"]{ transition:background-color .5s, outline-color .5s, background-image .5s !important; }
-      [data-pencil-name="dir"]{ transition:opacity .4s, transform .4s !important; }
+      [data-pencil-name="dir"]{ transition:opacity .4s !important; }   /* rotation is driven by inline transform + WAAPI (spinArrow), not CSS */
       [data-pencil-name="ic"] path{ transition:fill .45s; }
       .la [data-pencil-name="rail"]{ background-image:linear-gradient(-90deg,#4C8DF5 0%,#15233B 100%) !important; }
       .la [data-pencil-name="station"]{ background-color:#0A1120 !important; outline-color:#3C5A7C !important; }
       .la [data-pencil-name="cabin"]{ background-image:none !important; background-color:#080B13 !important; border-color:#84B4FF !important; box-shadow:0 0 16px 1px #2563EB55 !important; }
+      /* active + approaching the pickup floor: the cabin's halo breathes, then settles on arrival */
+      @keyframes cabApproach{ 0%,100%{ box-shadow:0 0 15px 1px #2563EB55; } 50%{ box-shadow:0 0 46px 7px #2563EBCC; } }
+      .la [data-pencil-name="cabin"].cab-arriving{ animation:cabApproach 1.05s var(--eio) infinite; }
       .la [data-pencil-name="cabin"].cab-open{ box-shadow:0 0 42px 3px #2563EBCC !important; }
       .la [data-pencil-name="cabin"] [data-pencil-name="ic"] path{ fill:#FFFFFF !important; }
       .la [data-pencil-name="dir"]{ opacity:1 !important; }
@@ -834,8 +837,7 @@
       .lp [data-pencil-name="cabin"]{ background-image:none !important; background-color:#161B24 !important; border-color:#2C3340 !important; box-shadow:none !important; }
       .lp [data-pencil-name="cabin"] [data-pencil-name="ic"] path{ fill:#3D4654 !important; }
       .lp [data-pencil-name="dir"]{ opacity:0 !important; }
-      [data-pencil-name="dir"]{ transform:rotate(180deg); }              /* SVG arrow points up → default (down lift) flips it down */
-      [data-pencil-name="dir"].dir-up{ transform:rotate(0deg) !important; }   /* up lift → arrow points up */
+      /* arrow orientation (up lift = 0°, down lift = 180°) + the arrival spin are set on the element inline by spinArrow() */
       /* station ring fills blue where the active cabin will stop (its served destinations) */
       [data-pencil-name="station"].stop{ background-color:#2F6BF0 !important; background-image:none !important; outline-color:#93C5FD !important;
         box-shadow:0 0 14px 3px rgba(37,99,235,.9); transition:background-color .4s var(--eo), outline-color .4s, box-shadow .4s !important; }
@@ -857,7 +859,7 @@
       .cab-inner{ position:absolute; inset:0; z-index:1; }        /* the lit interior, sits behind the doors */
       .cab-inner svg{ position:absolute; }
       .cab-fig{ opacity:1; }
-      .la .cab-inner{ background-image:linear-gradient(-90deg,#4D8BF6 0%,#1D4ED8 100%); }
+      .la .cab-inner{ background-image:radial-gradient(115% 78% at 50% 40%, rgba(160,200,255,.55) 0%, rgba(160,200,255,0) 58%), linear-gradient(-90deg,#4D8BF6 0%,#1D4ED8 100%); }
       .lp .cab-inner{ background-image:none; }
       .cab-door{ position:absolute; top:0; height:100%; width:50%; z-index:2; will-change:transform; }
       .cab-door-l{ left:0; }
@@ -935,8 +937,18 @@
         o.doorR.animate([{transform:o._dr||'translateX(0)'},{transform:rTo}], DOOR_ANIM);
         o._dl=lTo; o._dr=rTo;
       }
-      const openDoors  = o => { o.cab.classList.add('cab-open');    o.doorsOpen=true;  slideDoors(o,true);  };
-      const closeDoors = o => { o.cab.classList.remove('cab-open'); o.doorsOpen=false; slideDoors(o,false); };
+      // on arrival the arrow does a full spin about its own axis and lands pointing the onward direction
+      function spinArrow(o){
+        if(!o.dir) return;
+        const finalDeg = o.dir.classList.contains('dir-up') ? 0 : 180;   // up lift → up, down lift → down
+        o.dir.style.transform='rotate('+finalDeg+'deg)';                 // resting orientation (inline = reliable on SVG)
+        o._arrowAnim?.cancel();
+        o._arrowAnim = o.dir.animate(                                    // spin plays on top, lands back on the inline value
+          [{transform:'rotate('+(finalDeg-360)+'deg)'},{transform:'rotate('+finalDeg+'deg)'}],
+          {duration:760, delay:120, easing:'cubic-bezier(.2,.75,.2,1)'});
+      }
+      const openDoors  = o => { o.cab.classList.remove('cab-arriving'); o.cab.classList.add('cab-open'); o.doorsOpen=true; slideDoors(o,true); spinArrow(o); };
+      const closeDoors = o => { o.cab.classList.remove('cab-open','cab-arriving'); o.doorsOpen=false; o._arrowAnim?.cancel(); o._arrowAnim=null; if(o.dir) o.dir.style.transform=''; slideDoors(o,false); };
       [L,R].forEach(buildCabin);
 
       function moveCab(o, toIdx){                         // drive the cabin; top duration ∝ floors → real-time position
@@ -1039,7 +1051,7 @@
             if(o.servingTo!==curIdx){                       // fresh dispatch to the pickup floor
               clearTimeout(o.doorT); o.doorT=null; closeDoors(o);
               const t=moveCab(o,curIdx); o.servingTo=curIdx; maxT=Math.max(maxT,t);
-              if(t>0) o.doorT=setTimeout(()=>{ o.doorT=null; openDoors(o); }, t*1000);   // open once it arrives
+              if(t>0){ o.cab.classList.add('cab-arriving'); o.doorT=setTimeout(()=>{ o.doorT=null; openDoors(o); }, t*1000); }   // pulse while approaching, open on arrival
               else openDoors(o);
             } else if(!o.doorsOpen && !o.doorT) openDoors(o);   // already parked at the pickup floor (idled here) → just open
           } else {                                          // unused lift idles home, doors shut
