@@ -1111,7 +1111,17 @@
         route();
       }
 
+      // real buildings never leave both lifts on the same floors — randomise their idle homes each reset
+      let lastPair='';
+      function randomHomes(){
+        let a,b,key;
+        do{ a=Math.floor(Math.random()*5); b=Math.floor(Math.random()*5); key=a+'-'+b; }
+        while(a===b || key===lastPair);          // distinct floors, and not the exact same pair twice in a row
+        lastPair=key; L.home=a; R.home=b;
+      }
+
       function reset(){
+        randomHomes();
         curIdx=null; upLift=null; downLift=null; dests.clear(); clearTimeout(pulseT); pulseT=null;
         [L,R].forEach(o=> o.stations && o.stations.forEach(s=>s.classList.remove('stop')));
         FLOORS.forEach(f=>setPill(f,'dnor'));
