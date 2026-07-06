@@ -825,7 +825,6 @@
       [data-pencil-name="ic"] path{ transition:fill .45s; }
       .la [data-pencil-name="rail"]{ background-image:linear-gradient(-90deg,#4C8DF5 0%,#15233B 100%) !important; }
       .la [data-pencil-name="station"]{ background-color:#0A1120 !important; outline-color:#3C5A7C !important; }
-      [data-pencil-name="cabin"]{ transition:box-shadow .5s var(--eo) !important; }
       .la [data-pencil-name="cabin"]{ background-image:none !important; background-color:#080B13 !important; border-color:#84B4FF !important; box-shadow:0 0 16px 1px #2563EB55 !important; }
       .la [data-pencil-name="cabin"].cab-open{ box-shadow:0 0 42px 3px #2563EBCC !important; }
       .la [data-pencil-name="cabin"] [data-pencil-name="ic"] path{ fill:#FFFFFF !important; }
@@ -904,16 +903,18 @@
       const R = { el:Rlift, cab:Rcab, dir:ensureDir(Rcab), home:4, label:'B' };
       [Lcab,Rcab].forEach(c=> c.style.transition = CTR);
 
-      // --- cabin interior revealed when the doors open: direction arrow + man & woman ---
+      // --- cabin interior revealed when the doors open: direction arrow + bold man & woman pictograms ---
       const CAB_INNER =
-        '<svg data-pencil-name="dir" viewBox="0 0 13.99993896484375 14" preserveAspectRatio="xMidYMid meet" style="height:26px;left:33px;top:12px;width:26px;z-index:1">'+
-          '<path fill="#E5EEFF" d="M6.90088 2.35156q-0.0957 0.01367-0.17432 0.05127-0.0752 0.03418-0.15381 0.12647-0.0752 0.08887-0.11279 0.16748-0.03418 0.0752-0.03418 0.52295l0 3.01123q0 3.42822-0.01367 3.42822-0.01367 0-1.59619-1.58252-1.14844-1.14502-1.38086-1.37061-0.229-0.22559-0.31445-0.25293-0.2085-0.06836-0.42725 0.01709-0.21533 0.08203-0.31445 0.29053-0.04102 0.11279-0.04102 0.23926l0 0.04102q0 0.11279 0.05469 0.19824 0.09912 0.14014 0.46484 0.51611l1.67822 1.68164q2.10205 2.1123 2.18409 2.15332 0.12646 0.07178 0.28027 0.07178 0.15381 0 0.28027-0.07178 0.08203-0.04102 2.18409-2.15332l1.67822-1.68164q0.36572-0.37598 0.46484-0.51611 0.05469-0.08545 0.05469-0.19824l0-0.04102q0-0.12646-0.04102-0.23926-0.09912-0.2085-0.31787-0.29053-0.21533-0.08545-0.42382-0.01708-0.08545 0.02734-0.31788 0.25292-0.229 0.22559-1.37744 1.37061-1.58252 1.58252-1.59619 1.58252-0.01367 0-0.01367-3.42822l0-2.97022q0-0.48877-0.02734-0.54345-0.07178-0.19824-0.25293-0.30079-0.18115-0.10596-0.39307-0.06494z"/>'+
+        '<svg data-pencil-name="dir" viewBox="0 0 40 44" preserveAspectRatio="xMidYMid meet" style="height:30px;left:32px;top:9px;width:28px;z-index:1">'+
+          '<path fill="#EAF1FF" d="M20 42 L4 24 h9 V4 h14 V24 h9 Z"/>'+
         '</svg>'+
-        '<svg class="cab-fig" data-pencil-name="man" viewBox="0 0 14.000015258789062 14" preserveAspectRatio="xMidYMid meet" style="height:78px;left:2px;top:46px;width:46px;z-index:0">'+
-          '<path fill="#FFFFFF" d="M5.96777 12.06885l0-3.36328-0.56054 0q-0.20166 0-0.33838-0.1333-0.1333-0.13672-0.1333-0.33838l0-2.95996q0-0.38965 0.27685-0.66651 0.27686-0.27686 0.66651-0.27685l2.24218 0q0.38965 0 0.66651 0.27685 0.27686 0.27686 0.27685 0.66651l0 2.95996q0 0.20166-0.13672 0.33838-0.1333 0.1333-0.33496 0.1333l-0.56054 0 0 3.36328q0 0.20166-0.13672 0.33838-0.1333 0.1333-0.33496 0.1333l-1.1211 0q-0.20166 0-0.33838-0.1333-0.1333-0.13672-0.1333-0.33838z m1.03223-8.68164q-0.40674 0-0.69727-0.29053-0.29053-0.29053-0.29052-0.69727 0-0.40674 0.29052-0.69384 0.29053-0.29053 0.69727-0.29053 0.40674 0 0.69727 0.29053 0.29053 0.28711 0.29052 0.69384 0 0.40674-0.29052 0.69727-0.29053 0.29053-0.69727 0.29053z"/>'+
+        '<svg class="cab-fig" data-pencil-name="man" viewBox="0 0 40 76" preserveAspectRatio="xMidYMid meet" style="height:76px;left:5px;top:46px;width:42px;z-index:0">'+
+          '<circle cx="20" cy="9" r="7.5" fill="#FFFFFF"/>'+
+          '<path fill="#FFFFFF" d="M20 17 c-6 0 -10 4 -10 10 v14 h4 v31 h5 v-21 h2 v21 h5 v-31 h4 v-14 c0-6-4-10-10-10 z"/>'+
         '</svg>'+
-        '<svg class="cab-fig" data-pencil-name="woman" viewBox="0 0 14.000015258789062 14" preserveAspectRatio="xMidYMid meet" style="height:78px;left:44px;top:46px;width:46px;z-index:0">'+
-          '<path fill="#FFFFFF" d="M5.92334 12.06885l0-3.09326-0.92285 0q-0.24951 0-0.39307-0.20508-0.14014-0.20508-0.04785-0.44092l1.39111-3.5q0.13672-0.32471 0.417-0.5127 0.28027-0.18799 0.6289-0.18798 0.34863 0 0.63233 0.18798 0.28369 0.18799 0.42041 0.5127l1.39111 3.5q0.09229 0.23584-0.05127 0.44092-0.14014 0.20508-0.38965 0.20508l-0.92285 0 0 3.09326q0 0.20166-0.13672 0.33838-0.1333 0.1333-0.33496 0.1333l-1.20996 0q-0.20166 0-0.33838-0.1333-0.1333-0.13672-0.1333-0.33838z m1.07666-8.68164q-0.40674 0-0.69727-0.29053-0.29053-0.29053-0.29052-0.69727 0-0.40674 0.29052-0.69384 0.29053-0.29053 0.69727-0.29053 0.40674 0 0.69727 0.29053 0.29053 0.28711 0.29052 0.69384 0 0.40674-0.29052 0.69727-0.29053 0.29053-0.69727 0.29053z"/>'+
+        '<svg class="cab-fig" data-pencil-name="woman" viewBox="0 0 40 76" preserveAspectRatio="xMidYMid meet" style="height:76px;left:45px;top:46px;width:42px;z-index:0">'+
+          '<circle cx="20" cy="9" r="7.5" fill="#FFFFFF"/>'+
+          '<path fill="#FFFFFF" d="M20 17 c-5 0 -8 3 -9 7 l-6 22 h6 v27 h5 v-19 h8 v19 h5 v-27 h6 l-6-22 c-1-4-4-7-9-7 z"/>'+
         '</svg>';
       function buildCabin(o){
         const cab=o.cab;
@@ -1037,13 +1038,13 @@
           if(active){
             setLift(o,true, o===upLift);
             if(o.servingTo!==curIdx){                       // fresh dispatch to the pickup floor
-              clearTimeout(o.doorT); closeDoors(o);
+              clearTimeout(o.doorT); o.doorT=null; closeDoors(o);
               const t=moveCab(o,curIdx); o.servingTo=curIdx; maxT=Math.max(maxT,t);
-              if(t>0) o.doorT=setTimeout(()=>openDoors(o), t*1000);   // open once it arrives
+              if(t>0) o.doorT=setTimeout(()=>{ o.doorT=null; openDoors(o); }, t*1000);   // open once it arrives
               else openDoors(o);
             } else if(!o.doorsOpen && !o.doorT) openDoors(o);   // already parked at the pickup floor (idled here) → just open
           } else {                                          // unused lift idles home, doors shut
-            clearTimeout(o.doorT); closeDoors(o); setLift(o,false);
+            clearTimeout(o.doorT); o.doorT=null; closeDoors(o); setLift(o,false);
             if(o.servingTo!==o.home) moveCab(o,o.home);
             o.servingTo=o.home;
           }
@@ -1083,7 +1084,7 @@
         [L,R].forEach(o=> o.stations && o.stations.forEach(s=>s.classList.remove('stop')));
         FLOORS.forEach(f=>setPill(f,'dnor'));
         setLift(L,false); setLift(R,false);
-        [L,R].forEach(o=>{ clearTimeout(o.doorT); closeDoors(o); o.servingTo=o.home; });
+        [L,R].forEach(o=>{ clearTimeout(o.doorT); o.doorT=null; closeDoors(o); o.servingTo=o.home; });
         Lcab.style.transition=Rcab.style.transition='none';
         Lcab.style.top=cabinTop(L.home)+'px'; Rcab.style.top=cabinTop(R.home)+'px';
         L.at=L.home; R.at=R.home;
