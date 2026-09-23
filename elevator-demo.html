@@ -755,13 +755,14 @@
       /* airier Tricsy card — vertical breathing room only (keep H-padding 40 so mascot stays in).
          tight within groups, generous between the head / body / progress / actions rows */
       /* === TricsyCard rebuilt 1:1 from Pencil (TricsyCardbutton / nobutton) === */
-      [data-pencil-id="Y57i4u"]{ padding:38px 40px !important; height:315px !important; top:1378px !important; align-items:flex-end !important; gap:16px !important; overflow:visible !important; }
-      .tc-content{ width:578px; display:flex; flex-direction:column; gap:26px; align-items:flex-start; position:relative; z-index:0; }
+      [data-pencil-id="Y57i4u"]{ padding:38px 40px !important; height:315px !important; top:1378px !important; align-items:center !important; gap:16px !important; overflow:visible !important; }
+      .tc-content{ width:578px; display:flex; flex-direction:column; gap:25px; align-items:flex-start; position:relative; z-index:0; }
       .tc-head{ width:853px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
-      .tc-brand{ display:flex; flex-direction:row; align-items:center; gap:14px; }
-      .tc-logo{ width:160px; height:85px; flex-shrink:0; background:url('floor-names/tricsylogo1.png') left center/contain no-repeat; }
+      .tc-brand{ display:flex; flex-direction:row; align-items:center; gap:16px; }
+      .tc-logo{ width:274px; height:49px; flex-shrink:0; background:url('floor-names/tricsy-wordmark-white.svg') left center/contain no-repeat; }
       .tc-recommends{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
-      .tc-body{ display:flex; flex-direction:row; align-items:center; gap:24px; height:112px; width:100%; }
+      .tc-body{ display:flex; flex-direction:row; align-items:center; gap:0; width:100%; }
+      .tc-circles:not(:empty){ margin-right:24px; }
       .tc-circles{ position:relative; height:75px; flex-shrink:0; }
       .tc-circle{ position:absolute; top:0; width:75px; height:75px; border-radius:48px; display:flex; align-items:center; justify-content:center;
                   background-image:linear-gradient(-90deg,#3B82F6,#1D4ED8); box-shadow:0 0 26px #2563EBAA; color:#fff; font:700 44px Montserrat,system-ui,sans-serif;
@@ -769,7 +770,7 @@
       @starting-style{ .tc-circle{ transform:scale(.7); opacity:0; } }   /* each new circle scales+fades in (never from scale 0) */
       .tc-circle.leaving{ transform:scale(.6); opacity:0; }              /* removed floor fades out */
       .tc-txt{ transition:opacity .18s var(--eo), filter .18s var(--eo); }
-      .tc-txt{ display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+      .tc-txt{ display:flex; flex-direction:column; gap:25px; align-items:flex-start; }
       .tc-title{ color:#FFFFFF; font:700 34px Montserrat,system-ui,sans-serif; white-space:nowrap; }
       .tc-sub{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
       .tc-mascot{ position:absolute; left:623px; top:26px; width:261px; height:306px; background:url('floor-names/tricsy3.png') center/contain no-repeat; z-index:1; }
