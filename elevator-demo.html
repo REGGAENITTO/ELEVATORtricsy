@@ -901,8 +901,8 @@
         { name:'fm1', key:'parking', n:-1, idx:4 },
       ];
       const byIdx = i => FLOORS.find(f=>f.idx===i);
-      // the panel is fixed to one floor in the building, so the subline always names that floor
-      const hereTxt = f => 'You are on floor '+f.n+' · '+f.key.toUpperCase();
+      // the panel is fixed to one floor in the building; the wordmark above already names it
+      const hereTxt = f => 'You are on floor '+f.n;
       const cabinTop = i => i*160 + 22;        // 0=NATURE (top) … 4=PARKING (bottom)
       // cabin travel = real KONE low-rise speed (~1.6 m/s nominal, ~3.5 m floor-to-floor) + accel/decel overhead
       const LIFT_MPS=1.6, FLOOR_M=3.5, ACCEL_S=0.9;
