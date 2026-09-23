@@ -901,6 +901,8 @@
         { name:'fm1', key:'parking', n:-1, idx:4 },
       ];
       const byIdx = i => FLOORS.find(f=>f.idx===i);
+      // the panel is fixed to one floor in the building, so the subline always names that floor
+      const hereTxt = f => 'You are on floor '+f.n+' · '+f.key.toUpperCase();
       const cabinTop = i => i*160 + 22;        // 0=NATURE (top) … 4=PARKING (bottom)
       // cabin travel = real KONE low-rise speed (~1.6 m/s nominal, ~3.5 m floor-to-floor) + accel/decel overhead
       const LIFT_MPS=1.6, FLOOR_M=3.5, ACCEL_S=0.9;
@@ -1096,7 +1098,7 @@
         } else if(pulseT){ selPills.forEach(p=>p.classList.add('pulsing')); }
         setWordmark(byIdx(curIdx));
         renderStops();
-        if(dests.size===0){ kick.textContent='YOU ARE HERE'; sub.textContent='Step 2 · tap your destination'; return; }
+        if(dests.size===0){ kick.textContent='YOU ARE HERE'; sub.textContent=hereTxt(byIdx(curIdx)); return; }
         const parts=[]; if(upLift) parts.push('Lift '+upLift.label+' up'); if(downLift) parts.push('Lift '+downLift.label+' down');
         kick.textContent='ON ROUTE';
         sub.textContent=dests.size+' floor'+(dests.size>1?'s':'')+' · '+parts.join(', ');
@@ -1105,7 +1107,7 @@
       function onClick(f, e){
         spinTrail(pill(f.name));     // dot-mark spins on every interaction
         if(curIdx===null){ curIdx=f.idx; setPill(f,'dcur'); setWordmark(f);
-          kick.textContent='YOU ARE HERE'; sub.textContent='Step 2 · tap your destination'; return; }   // step 1 = where I am
+          kick.textContent='YOU ARE HERE'; sub.textContent=hereTxt(f); return; }   // step 1 = where I am
         if(f.idx===curIdx) return;                                              // can't ride to my own floor
         if(dests.has(f.idx)){ dests.delete(f.idx); setPill(f,'dnor'); }         // multi-select: toggle destination
         else { dests.add(f.idx); setPill(f,'dsel'); }                           // blue fills left→right via .dsel::before
