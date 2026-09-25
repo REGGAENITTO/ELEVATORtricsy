@@ -754,26 +754,95 @@
       [data-pencil-id="gtbvI"]{ flex:0 0 600px !important; width:600px !important; min-width:0 !important; overflow:visible !important; }
       /* airier Tricsy card — vertical breathing room only (keep H-padding 40 so mascot stays in).
          tight within groups, generous between the head / body / progress / actions rows */
-      /* === TricsyCard rebuilt 1:1 from Pencil (TricsyCardbutton / nobutton) === */
-      [data-pencil-id="Y57i4u"]{ padding:38px 40px !important; height:315px !important; top:1378px !important; align-items:center !important; gap:16px !important; overflow:visible !important; }
-      .tc-content{ width:578px; display:flex; flex-direction:column; gap:25px; align-items:flex-start; position:relative; z-index:0; }
-      .tc-head{ width:853px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
-      .tc-brand{ display:flex; flex-direction:row; align-items:center; gap:16px; }
-      .tc-logo{ width:274px; height:49px; flex-shrink:0; background:url('floor-names/tricsy-wordmark-white.svg') left center/contain no-repeat; }
-      .tc-recommends{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
-      .tc-body{ display:flex; flex-direction:row; align-items:center; gap:0; width:100%; }
-      .tc-circles:not(:empty){ margin-right:24px; }
-      .tc-circles{ position:relative; height:75px; flex-shrink:0; }
-      .tc-circle{ position:absolute; top:0; width:75px; height:75px; border-radius:48px; display:flex; align-items:center; justify-content:center;
+      /* === TricsyCard — two modes on the same frame ===
+             .mode-classic = the plain demo card (unchanged, as on the live page)
+             .mode-pers    = the personalised card from elevator.pen (variant B) */
+      [data-pencil-id="Y57i4u"].mode-classic{ padding:38px 40px !important; height:315px !important; top:1378px !important;
+        align-items:center !important; justify-content:flex-start !important; gap:16px !important; overflow:visible !important;
+        border-radius:40px !important; border:3px solid #1E3A8A !important; background-color:#0A0F1F !important; }
+      .mode-classic .tc-content{ width:578px; display:flex; flex-direction:column; gap:25px; align-items:flex-start; position:relative; z-index:0; }
+      .mode-classic .tc-head{ width:853px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; }
+      .mode-classic .tc-brand{ display:flex; flex-direction:row; align-items:center; gap:16px; }
+      .mode-classic .tc-logo{ width:274px; height:49px; flex-shrink:0; background:url('floor-names/tricsy-wordmark-white.svg') left center/contain no-repeat; }
+      .mode-classic .tc-recommends{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
+      .mode-classic .tc-body{ display:flex; flex-direction:row; align-items:center; gap:0; width:100%; }
+      .mode-classic .tc-circles:not(:empty){ margin-right:24px; }
+      .mode-classic .tc-circles{ position:relative; height:75px; flex-shrink:0; }
+      .mode-classic .tc-circle{ position:absolute; top:0; width:75px; height:75px; border-radius:48px; display:flex; align-items:center; justify-content:center;
                   background-image:linear-gradient(-90deg,#3B82F6,#1D4ED8); box-shadow:0 0 26px #2563EBAA; color:#fff; font:700 44px Montserrat,system-ui,sans-serif;
                   transition:left .38s var(--eio), transform .26s var(--eo), opacity .2s var(--eo); }
-      @starting-style{ .tc-circle{ transform:scale(.7); opacity:0; } }   /* each new circle scales+fades in (never from scale 0) */
-      .tc-circle.leaving{ transform:scale(.6); opacity:0; }              /* removed floor fades out */
+      @starting-style{ .mode-classic .tc-circle{ transform:scale(.7); opacity:0; } }   /* each new circle scales+fades in (never from scale 0) */
+      .mode-classic .tc-circle.leaving{ transform:scale(.6); opacity:0; }              /* removed floor fades out */
+      .mode-classic .tc-txt{ display:flex; flex-direction:column; gap:25px; align-items:flex-start; }
+      .mode-classic .tc-title{ color:#FFFFFF; font:700 34px Montserrat,system-ui,sans-serif; white-space:nowrap; }
+      .mode-classic .tc-sub{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
+      .mode-classic .tc-mascot{ position:absolute; left:623px; top:26px; width:261px; height:306px; background:url('floor-names/tricsy3.png') center/contain no-repeat; z-index:1; }
+
       .tc-txt{ transition:opacity .18s var(--eo), filter .18s var(--eo); }
-      .tc-txt{ display:flex; flex-direction:column; gap:25px; align-items:flex-start; }
-      .tc-title{ color:#FFFFFF; font:700 34px Montserrat,system-ui,sans-serif; white-space:nowrap; }
-      .tc-sub{ color:#8A8F98; font:400 24px Montserrat,system-ui,sans-serif; white-space:nowrap; }
-      .tc-mascot{ position:absolute; left:623px; top:26px; width:261px; height:306px; background:url('floor-names/tricsy3.png') center/contain no-repeat; z-index:1; }
+      [data-pencil-id="Y57i4u"].mode-pers{ padding:32px 34px !important; height:350px !important; top:1343px !important;
+        border-radius:36px !important; border:2px solid #1E3A6B !important; background-color:#0A1120 !important;
+        align-items:center !important; justify-content:center !important; gap:1px !important; overflow:visible !important; }
+      .mode-pers .tc-left{ flex:0 0 563px; width:563px; display:flex; flex-direction:column; gap:33px; justify-content:center; }
+      .mode-pers .tc-head{ display:flex; flex-direction:row; align-items:center; gap:14px; }
+      .mode-pers .tc-logo{ width:218px; height:39px; flex-shrink:0; background:url('floor-names/tricsy-wordmark-white.svg') left center/contain no-repeat; }
+      .mode-pers .tc-recommends{ color:#8A8F98; font:400 18px Montserrat,system-ui,sans-serif; white-space:nowrap; }
+      .mode-pers .tc-body{ display:flex; flex-direction:column; gap:18px; padding:10px 0; }
+      .mode-pers .tc-title{ color:#FFFFFF; font:700 28px/1.22 Montserrat,system-ui,sans-serif; white-space:pre-line; }
+      .mode-pers .tc-sub{ color:#8A8F98; font:400 19px/1.35 Montserrat,system-ui,sans-serif; }
+      .mode-pers .tc-actions{ display:flex; flex-direction:row; gap:10px; align-items:flex-end; }
+      .mode-pers .tc-actions:empty{ display:none; }
+      .mode-pers .tc-btn{ position:relative; overflow:hidden; display:flex; flex-direction:row; align-items:center; gap:9px;
+        border-radius:24px; padding:13px 20px; font:700 17px Montserrat,system-ui,sans-serif; white-space:nowrap;
+        cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation; transition:transform .12s var(--eo); }
+      .mode-pers .tc-btn:active{ transform:scale(.97); }
+      .mode-pers .tc-btn > *{ position:relative; z-index:1; }
+      .mode-pers .tc-btn svg{ width:18px; height:18px; flex-shrink:0; }
+      .mode-pers .tc-btn.ghost{ background:#111A2C; border:2px solid #24365C; color:#A7B0C0; }
+      .mode-pers .tc-btn.ghost svg{ stroke:#A7B0C0; }
+      .mode-pers .tc-btn.primary{ background:#111A2C; border:2px solid #24365C; color:#FFFFFF; }
+      .mode-pers .tc-btn.primary svg{ stroke:#FFFFFF; }
+      /* the blue pill is wiped off right → left while you still have time to tap */
+      .mode-pers .tc-cd{ position:absolute; inset:-2px; background:#2563EB; transform-origin:left center; z-index:0; }
+      .mode-pers .tc-panel{ position:relative; flex:0 0 222px; width:222px; height:256px; box-sizing:border-box;
+        background:#0C1830; border:2px solid #2A4C8F; border-radius:30px; overflow:visible;
+        display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:24px 20px; }
+      .mode-pers .tc-mascot{ position:absolute; left:-14px; top:46px; width:238px; height:210px;
+        background:url('floor-names/tricsy3.png') center/contain no-repeat;
+        transition:left .6s var(--eio), top .6s var(--eio), width .6s var(--eio), height .6s var(--eio),
+                   opacity .4s var(--eo), transform .4s var(--eo); }
+      .mode-pers .tc-mascot.small{ left:0px; top:71px; width:210px; height:185px; }
+      .mode-pers .tc-mascot.gone{ opacity:0; transform:scale(.82); }
+      .mode-pers .tc-pill{ position:absolute; left:50%; top:24px; opacity:0; transform:translateX(-50%) translateY(-7px) scale(.86);
+        display:flex; flex-direction:row; align-items:center; gap:9px; padding:8px 16px; border-radius:22px;
+        background:#12244A; border:1.5px solid #2A4C8F; color:#60A5FA; letter-spacing:1.3px; white-space:nowrap;
+        font:700 14px Montserrat,system-ui,sans-serif; transition:opacity .3s var(--eo), transform .46s var(--eio); }
+      .mode-pers .tc-pill.on{ opacity:1; transform:translateX(-50%) translateY(0) scale(1); }
+      .mode-pers .tc-pill svg{ width:17px; height:17px; flex-shrink:0; stroke:#60A5FA; }
+      .mode-pers .tc-dest{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+        opacity:0; pointer-events:none; transition:opacity .28s var(--eo); }
+      .mode-pers .tc-dest.tight{ gap:11px; }
+      .mode-pers .tc-dest.on{ opacity:1; }
+      .mode-pers .tc-dest.on > *{ animation:destIn .52s var(--eio) backwards; }
+      .mode-pers .tc-dest.on > *:nth-child(1){ animation-delay:.03s; }
+      .mode-pers .tc-dest.on > *:nth-child(2){ animation-delay:.11s; }
+      .mode-pers .tc-dest.on > *:nth-child(3){ animation-delay:.19s; }
+      .mode-pers .tc-dest.on > *:nth-child(4){ animation-delay:.27s; }
+      @keyframes destIn{ from{ opacity:0; transform:translateY(10px) scale(.9); } to{ opacity:1; transform:none; } }
+      /* the small panel breathes in colour while the cabin is on its way to pick you up */
+      @keyframes panelWait{ 0%,100%{ border-color:#2A4C8F; background-color:#0C1830; box-shadow:0 0 0 0 rgba(37,99,235,0); }
+                             50%{ border-color:#60A5FA; background-color:#10203E; box-shadow:0 0 30px 2px rgba(37,99,235,.38); } }
+      .mode-pers .tc-panel.pulsing{ animation:panelWait 1.6s var(--eio) infinite; }
+      @media (prefers-reduced-motion: reduce){ .mode-pers .tc-panel.pulsing{ animation:none; } }
+      /* the card breathes while the cabin is still on its way */
+      @keyframes cardWait{ 0%,100%{ box-shadow:0 0 0 0 rgba(37,99,235,0), inset 0 0 0 rgba(37,99,235,0); }
+                            50%{ box-shadow:0 0 46px 5px rgba(37,99,235,.30), inset 0 0 46px rgba(37,99,235,.12); } }
+      [data-pencil-id="Y57i4u"].waiting{ animation:cardWait 1.7s var(--eio) infinite; }
+      @media (prefers-reduced-motion: reduce){ [data-pencil-id="Y57i4u"].waiting{ animation:none; } }
+      .mode-pers .tc-lbl{ color:#8A8F98; font:700 12px Montserrat,system-ui,sans-serif; letter-spacing:2.2px; white-space:nowrap; }
+      .mode-pers .tc-badge{ width:112px; height:112px; border-radius:56px; background:#2563EB; box-shadow:0 0 34px #2563EB80;
+        display:flex; align-items:center; justify-content:center; color:#FFFFFF; font:700 54px Montserrat,system-ui,sans-serif; }
+      .mode-pers .tc-wm{ height:26px; background:center/contain no-repeat; }
+      .mode-pers .tc-foot{ color:#8A8F98; font:400 15px Montserrat,system-ui,sans-serif; white-space:nowrap; }
       /* reduced motion: keep colour/opacity, drop movement & scale */
       @media (prefers-reduced-motion: reduce){
         [data-pencil-name="cabin"]{ transition:background-color .3s, background-image .3s, border-color .3s, box-shadow .3s !important; }
@@ -849,10 +918,12 @@
       .aaoff [data-pencil-name="cdTx"]{ color:#6B7280 !important; }
       .aaoff [data-pencil-name="cdIc"] path{ fill:#6B7280 !important; }
       .aaoff [data-pencil-name="tTrack"]{ opacity:0 !important; }
-      #dreset{ position:fixed; right:20px; bottom:20px; z-index:99; font-family:Montserrat,system-ui,sans-serif;
-               font-weight:700; font-size:17px; color:#A7B0C0; background:#15171E; border:1px solid #2A3550;
-               border-radius:26px; padding:13px 24px; cursor:pointer; }
-      #dreset:hover{ background:#1c2030; color:#fff; }
+      #dbar{ position:fixed; right:20px; bottom:20px; z-index:99; display:flex; flex-direction:row; align-items:center; gap:14px; }
+      #dbar button{ position:static; font-family:Montserrat,system-ui,sans-serif; font-weight:700; font-size:17px;
+               color:#A7B0C0; background:#15171E; border:1px solid #2A3550; border-radius:26px; padding:13px 24px; cursor:pointer;
+               transition:background .25s, color .25s, border-color .25s, box-shadow .25s; }
+      #dbar button:hover{ background:#1c2030; color:#fff; }
+      #dbar button.on{ background:#2563EB; border-color:#60A5FA; color:#FFFFFF; box-shadow:0 0 22px #2563EB66; }
 
       /* === door-open reveal: closed cabin = bare neon outline (dark doors, unlit); on arrival the dark doors
              part from the centre and reveal the blue interior — gradient + man/woman + direction arrow === */
@@ -889,7 +960,11 @@
       .la [data-pencil-name="cabin"].cab-open .cab-cdir{ opacity:0; }        /* doors open → hide (interior arrow takes over) */
       .lp [data-pencil-name="cabin"] .cab-cdir{ opacity:0; }
     </style>
-    <button id="dreset">↺ Reset</button>
+    <div id="dbar">
+      <button id="dmeet" aria-pressed="false">✦ Meeting</button>
+      <button id="dpers" aria-pressed="false">✦ Personalize</button>
+      <button id="dreset">↺ Reset</button>
+    </div>
     <script>
       const $ = s => document.querySelector(s);
       const pill = n => $('[data-pencil-name="'+n+'"]');
@@ -1020,30 +1095,70 @@
       }
       L.stations=fixTimeline(Llift); R.stations=fixTimeline(Rlift);
 
-      let curIdx=null, upLift=null, downLift=null, pulseT=null;   // upLift/downLift persist → stable assignment (no arrow flip)
+      let curIdx=null, upLift=null, downLift=null, pulseT=null;   // (upLift/downLift kept only for the reset bookkeeping)
       const dests=new Set();
       const setPill=(f,cls)=>{ const e=pill(f.name); e.classList.remove('dnor','dcur','dsel','pulsing'); e.classList.add(cls); };
       const setLift=(o,on,up)=>{ o.el.classList.remove('la','lp'); o.el.classList.add(on?'la':'lp'); if(on) o.dir.classList.toggle('dir-up',up); };
       const setWordmark=f=>{ wm.style.opacity='1'; wm.style.backgroundImage="url('floor-names/"+f.key+"_s.png')"; };
 
-      // --- rebuild the Tricsy card 1:1 from Pencil (TricsyCardbutton / nobutton) ---
-      card.innerHTML=
-        '<div class="tc-content">'+
-          '<div class="tc-head"><div class="tc-brand"><div class="tc-logo"></div><div class="tc-recommends">recommends</div></div></div>'+
-          '<div class="tc-body"><div class="tc-circles" id="tcCircles"></div>'+
-            '<div class="tc-txt"><div class="tc-title" id="tcTitle"></div><div class="tc-sub" id="tcSub"></div></div></div>'+
-        '</div>'+
-        '<div class="tc-mascot"></div>';
-      const tcCircles=$('#tcCircles'), tcTitle=$('#tcTitle'), tcSub=$('#tcSub'), tcTxt=$('.tc-txt');
-      const STEP=54;            // circle overlap step (px), first-pressed sits left + on top
-      const circleMap=new Map();
-      let txtT=null;
+      // --- two Tricsy cards on one frame ---
+      //     classic = the plain demo card, exactly as it was (Personalize off)
+      //     pers    = the personalised card from elevator.pen + the recognition story (Personalize on)
+      const ICONS={
+        'scan-face':'<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/><path d="M9.5 14.5s1 1 2.5 1 2.5-1 2.5-1"/>',
+        'check':'<path d="M20 6 9 17l-5-5"/>',
+        'rotate-ccw':'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+        'car-front':'<path d="M5 17H3v-5l2-5h14l2 5v5h-2"/><path d="M5 12h14"/><circle cx="7.5" cy="16.5" r="1.4"/><circle cx="16.5" cy="16.5" r="1.4"/>',
+        'building-2':'<path d="M6 22V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v18"/><path d="M14 9h4a1 1 0 0 1 1 1v12"/><path d="M2 22h20"/><path d="M9 7h2"/><path d="M9 11h2"/><path d="M9 15h2"/>'
+      };
+      const svgIc = n => '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[n]||'')+'</svg>';
+      const WMW={ nature:141, face:118, finger:143, hub:92, parking:163 };
+      const STEP=54;            // classic: circle overlap step (px), first-pressed sits left + on top
+      let mode='', txtT=null, destT=null, lastSig='', lastTxtSig='', circleMap=new Map();
+      let tcCircles=null, tcTitle=null, tcSub=null, tcTxt=null;
+      let tcActions=null, tcMascot=null, tcPill=null, tcDest=null;
+
+      function buildClassic(){
+        card.innerHTML=
+          '<div class="tc-content">'+
+            '<div class="tc-head"><div class="tc-brand"><div class="tc-logo"></div><div class="tc-recommends">recommends</div></div></div>'+
+            '<div class="tc-body"><div class="tc-circles" id="tcCircles"></div>'+
+              '<div class="tc-txt"><div class="tc-title" id="tcTitle"></div><div class="tc-sub" id="tcSub"></div></div></div>'+
+          '</div>'+
+          '<div class="tc-mascot"></div>';
+        tcCircles=$('#tcCircles'); tcTitle=$('#tcTitle'); tcSub=$('#tcSub'); tcTxt=$('.tc-txt');
+        circleMap=new Map();
+      }
+      function buildPers(){
+        card.innerHTML=
+          '<div class="tc-left">'+
+            '<div class="tc-head"><div class="tc-logo"></div><div class="tc-recommends">recommends</div></div>'+
+            '<div class="tc-body tc-txt"><div class="tc-title" id="tcTitle"></div><div class="tc-sub" id="tcSub"></div>'+
+              '<div class="tc-actions" id="tcActions"></div></div>'+
+          '</div>'+
+          '<div class="tc-panel">'+
+            '<div class="tc-mascot" id="tcMascot"></div>'+
+            '<div class="tc-pill" id="tcPill">'+svgIc('scan-face')+'<span>FACE MATCH</span></div>'+
+            '<div class="tc-dest" id="tcDest"></div>'+
+          '</div>';
+        tcTitle=$('#tcTitle'); tcSub=$('#tcSub'); tcTxt=$('.tc-txt'); tcActions=$('#tcActions');
+        tcMascot=$('#tcMascot'); tcPill=$('#tcPill'); tcDest=$('#tcDest');
+        lastSig=''; lastTxtSig='';
+      }
+      function setMode(m){
+        if(mode===m) return;
+        mode=m; clearTimeout(txtT); clearTimeout(destT);
+        card.classList.remove('mode-classic','mode-pers'); card.classList.add('mode-'+m);
+        (m==='classic'?buildClassic:buildPers)();
+      }
+
+      // --- classic card ---
       function setTxt(t,s){     // blur-masked crossfade on title/sub change
         if(tcTitle.textContent===t && tcSub.textContent===s) return;
         tcTxt.style.opacity='0'; tcTxt.style.filter='blur(3px)'; clearTimeout(txtT);
         txtT=setTimeout(()=>{ tcTitle.textContent=t; tcSub.textContent=s; tcTxt.style.opacity='1'; tcTxt.style.filter='blur(0)'; },110);
       }
-      function renderStops(){
+      function renderClassic(){
         const arr=[...dests];
         circleMap.forEach((el,idx)=>{ if(!dests.has(idx)){ el.classList.add('leaving'); setTimeout(()=>el.remove(),300); circleMap.delete(idx); } });
         arr.forEach((idx,i)=>{   // add new (scales in via @starting-style), reposition existing (left transitions)
@@ -1057,60 +1172,255 @@
         else setTxt('Lift is coming','Have a nice day');
       }
 
-      // dispatch + UI for the current set of destinations (multi-select)
+      // --- personalised card: one card state per paint ---
+      function paint(s){
+        const sig=JSON.stringify(s); if(sig===lastSig) return; lastSig=sig;
+        const tsig=JSON.stringify([s.title,s.sub,s.actions||[]]);
+        if(tsig!==lastTxtSig){          // only crossfade the words when the words actually change
+          lastTxtSig=tsig;
+          tcTxt.style.opacity='0'; tcTxt.style.filter='blur(3px)'; clearTimeout(txtT);
+          txtT=setTimeout(()=>{
+            tcTitle.textContent=s.title; tcSub.textContent=s.sub;
+            tcActions.innerHTML=(s.actions||[]).map((b,i)=>
+              '<div class="tc-btn '+(i?'ghost':'primary')+'" data-act="'+b.act+'">'+
+                (i?'':'<i class="tc-cd"></i>')+svgIc(b.icon)+'<span>'+b.label+'</span></div>').join('');
+            tcActions.querySelectorAll('.tc-btn').forEach(b=> b.addEventListener('click',()=>onCardBtn(b.dataset.act)));
+            if(s.countdown) countdown(s.countdown);
+            tcTxt.style.opacity='1'; tcTxt.style.filter='blur(0)';
+          },110);
+        }
+        clearTimeout(destT);
+        if(s.dest){
+          const d=s.dest, dsig=JSON.stringify(d);
+          tcPill.classList.remove('on'); tcMascot.classList.add('gone');
+          if(tcDest.dataset.sig!==dsig){
+            tcDest.dataset.sig=dsig; tcDest.classList.remove('on');
+            destT=setTimeout(()=>{                      // old content fades out, new one animates in
+              tcDest.innerHTML='<div class="tc-lbl">'+d.lbl+'</div><div class="tc-badge">'+d.n+'</div>'+
+                '<div class="tc-wm" style="width:'+WMW[d.key]+'px;background-image:url(\'floor-names/'+d.key+'_s.png\')"></div>'+
+                (d.foot?'<div class="tc-foot">'+d.foot+'</div>':'');
+              tcDest.classList.toggle('tight',!!d.foot);
+              tcDest.classList.add('on');
+            },170);
+          }
+        } else {
+          tcDest.classList.remove('on'); tcDest.dataset.sig='';
+          destT=setTimeout(()=>{ tcDest.innerHTML=''; },300);
+          tcMascot.classList.remove('gone'); tcMascot.classList.toggle('small',!!s.small);
+          tcPill.classList.toggle('on',!!s.pill);
+        }
+      }
+      // blue drains off the primary button like a wiper, right → left
+      function countdown(ms){
+        const cd=tcActions.querySelector('.tc-cd'); if(!cd) return;
+        cd.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}],{duration:ms,easing:'linear',fill:'forwards'});
+      }
+      function renderPers(){
+        if(storyOn) return;
+        const arr=[...dests];
+        if(!arr.length){ paint(CARD1); return; }
+        const f=byIdx(arr[0]);
+        const d={ lbl:arr.length>1?'FIRST STOP':'YOUR DESTINATION', n:String(f.n), key:f.key };
+        paint(arr.length===1
+          ? { title:'Take '+f.key.toUpperCase()+' · Floor '+f.n, sub:'Your destination', dest:d }
+          : { title:'Lift is coming', sub:arr.length+' floors · have a nice day', dest:d });
+      }
+      function renderStops(){ if(!mode) return; (mode==='classic'?renderClassic:renderPers)(); }
+
+      // --- the five card states (elevator.pen · 1card … 5cardparking) ---
+      const DEST={
+        nature:{ lbl:'YOUR FLOOR', n:'3', key:'nature' },
+        meeting:{ lbl:'MEETING AT 09:45', n:'1', key:'finger', foot:'Room Iris' },
+        parking:{ lbl:'YOUR CAR IS HERE', n:'-1', key:'parking' }
+      };
+      const CARD1={ title:'Hi! Where can I take you?', sub:'Elevators coming' };
+      const CARD2={ title:'Hi Peter!\nWelcome to Biometrics House.', sub:'Calling the lift for you · Lift A', small:true, pill:true };
+      const CARD3={ title:'Hi Peter!\nWelcome to Biometrics House.', sub:'Calling the lift for you · Lift A', dest:DEST.nature };
+      const CARD4={ title:'Peter, your meeting is two floors up.', sub:'I called the lift to FINGER instead of your desk. Keep it?',
+                    dest:DEST.meeting, countdown:6600,
+                    actions:[{label:'Keep the meeting',icon:'check',act:'keep'},{label:'My desk · 3 NATURE',icon:'rotate-ccw',act:'desk'}] };
+      const CARD5={ title:'Have a good evening, Peter!', sub:'Your car is waiting in the garage · Lift B going down',
+                    dest:DEST.parking,
+                    actions:[{label:'Go to my car',icon:'car-front',act:'car'},{label:'Stay in the building',icon:'building-2',act:'stay'}] };
+
+      // --- story engine: the camera above the panel recognises you, the system presses for you ---
+      let storyOn=false, personalize=false, meeting=false, arrivalAt=0;   // off = the plain demo
+      // The beats are scheduled one at a time. A throttled tab (or a preview pane that stops drawing)
+      // can fire one late — when that happens the timeline is re-based on the real time, so the next
+      // beat still gets its full gap instead of the whole story catching up in one burst.
+      let steps=[], stepI=0, stepT=null, stepBase=0, waitT=null;
+      function at(ms,fn){ steps.push({ms:ms,fn:fn}); }                  // ms = time from the start of the story
+      function schedule(){
+        clearTimeout(stepT);
+        if(stepI>=steps.length) return;
+        const st=steps[stepI], due=stepBase+st.ms;
+        stepT=setTimeout(()=>{
+          const late=performance.now()-due;
+          if(late>400) stepBase+=late;              // we were away: keep the pacing, don't catch up
+          st.fn(); stepI++; schedule();
+        }, Math.max(0, due-performance.now()));
+      }
+      function runTimeline(){ stepI=0; stepBase=performance.now(); schedule(); }
+      function stopStory(){
+        storyOn=false; steps=[]; stepI=0;
+        clearTimeout(stepT); stepT=null; clearTimeout(waitT); waitT=null;
+        fxT.forEach(clearTimeout); fxT=[];
+        card.classList.remove('waiting');
+        const p=card.querySelector('.tc-panel'); if(p) p.classList.remove('pulsing');
+      }
+      function waitForCab(){                        // pulse until the cabin arrives (at least a beat)
+        card.classList.add('waiting');
+        const rem=Math.max(arrivalAt-performance.now(), 2000);
+        clearTimeout(waitT);
+        waitT=setTimeout(()=> card.classList.remove('waiting'), rem);
+      }
+      let fxT=[];
+      const fx=(ms,fn)=> fxT.push(setTimeout(fn,ms));
+      const panel=()=> card.querySelector('.tc-panel');
+      function pulsePanel(on){                     // colour breath on the small panel while the cabin comes for you
+        const p=panel(); if(!p) return;
+        p.classList.toggle('pulsing',!!on);
+        if(on) fx(Math.max(arrivalAt-performance.now(),1500), ()=>{ const q=panel(); if(q) q.classList.remove('pulsing'); });
+      }
+      function setHere(idx){                       // which floor this panel stands on
+        FLOORS.forEach(f=> setPill(f, f.idx===idx?'dcur':'dnor'));
+        curIdx=idx; setWordmark(byIdx(idx));
+        kick.textContent='YOU ARE HERE'; sub.textContent=hereTxt(byIdx(idx));
+      }
+      function goFloor(idx){                       // Tricsy presses the button instead of you
+        [...dests].forEach(i=> setPill(byIdx(i),'dnor'));
+        dests.clear(); assign.clear();
+        if(idx!==null && idx!==curIdx){ dests.add(idx); callFloor(idx); setPill(byIdx(idx),'dsel'); }
+        route();
+      }
+      function startStory(){
+        stopStory(); storyOn=true;
+        setHere(4); paint(CARD1);                                        // 0s   you are in the garage, not recognised yet
+        at(3000, ()=>{ paint(CARD2); goFloor(0); pulsePanel(true); });   // 3s   face match — the lift is called, the panel breathes
+        at(9000, ()=>{ paint(CARD3); pulsePanel(false); waitForCab(); });   // 9s   your floor, now the whole card breathes
+        runTimeline();
+      }
+      function startMeeting(){
+        stopStory(); storyOn=true;
+        setHere(4); paint(CARD1);                                        // 0s   you just parked, nothing yet
+        at(3000, ()=>{ paint(CARD4); goFloor(2); waitForCab(); });       // 3s   the calendar says FINGER, not your desk
+        runTimeline();
+      }
+      function onCardBtn(act){
+        stopStory();
+        if(act==='keep'){ goFloor(2); paint({ title:'See you at the meeting, Peter.', sub:'Lift A · Floor 1 · Room Iris', dest:DEST.meeting }); }
+        if(act==='desk'){ goFloor(0); paint({ title:'Back to your desk, Peter.', sub:'Lift A · Floor 3 · NATURE', dest:DEST.nature }); }
+        if(act==='car'){  goFloor(4); paint({ title:'Going down to your car.', sub:'Lift B · Floor -1 · PARKING', dest:DEST.parking }); }
+        if(act==='stay'){ goFloor(null); paint(CARD1); }
+      }
+
+      // --- dispatch: every called floor gets a car, the two share the work ---
+      const assign=new Map();                             // floor idx -> the car that will take it
+      function liftFor(d){
+        const has = o => o.riding || [...dests].some(i=> i!==d && assign.get(i)===o);
+        const hl=has(L), hr=has(R);
+        if(hl && !hr) return R;                           // one car is already busy → the free one takes it
+        if(hr && !hl) return L;
+        const dist = o => Math.abs((o.at ?? o.home) - curIdx);
+        return dist(L)<=dist(R) ? L : R;                  // otherwise whichever car is nearer to this panel
+      }
+      function callFloor(d){ assign.set(d, liftFor(d)); }
+      function dropFloor(d){ assign.delete(d); }
+
       function route(){
-        const up=[...dests].filter(i=>i<curIdx), down=[...dests].filter(i=>i>curIdx);
-        // stable: a lift keeps its direction; a NEW direction takes the other (free) lift. Arrow = its onward travel.
-        if(!up.length)   upLift=null;
-        if(!down.length) downLift=null;
-        const nearest=(Math.abs(curIdx-L.home)<=Math.abs(curIdx-R.home))?L:R;
-        if(up.length   && !upLift)   upLift   = (downLift===L)?R : (downLift===R)?L : nearest;
-        if(down.length && !downLift) downLift = (upLift===L)?R   : (upLift===R)?L   : nearest;
         let maxT=0;
         [L,R].forEach(o=>{
-          const active = (o===upLift)||(o===downLift);
-          if(active){
-            setLift(o,true, o===upLift);
-            if(o.cdir) o.cdir.style.transform=(o===upLift)?'rotate(0deg)':'rotate(180deg)';   // point the closed-door arrow the onward way
-            if(o.servingTo!==curIdx){                       // fresh dispatch to the pickup floor
+          if(o.riding) return;                            // on its way with a passenger: leave it alone
+          const q=stopsFor(o);
+          if(q.length){
+            const up = q[0] < curIdx;                     // its onward travel, from the first floor it was given
+            setLift(o,true,up);
+            if(o.cdir) o.cdir.style.transform = up?'rotate(0deg)':'rotate(180deg)';
+            if(o.servingTo!==curIdx){                     // fresh dispatch to the pickup floor
               clearTimeout(o.doorT); o.doorT=null; closeDoors(o);
               const t=moveCab(o,curIdx); o.servingTo=curIdx; maxT=Math.max(maxT,t);
-              if(t>0){ o.cab.classList.add('cab-arriving'); o.doorT=setTimeout(()=>{ o.doorT=null; openDoors(o); }, t*1000); }   // pulse while approaching, open on arrival
-              else openDoors(o);
-            } else if(!o.doorsOpen && !o.doorT) openDoors(o);   // already parked at the pickup floor (idled here) → just open
-          } else {                                          // unused lift idles home, doors shut
-            clearTimeout(o.doorT); o.doorT=null; closeDoors(o); setLift(o,false);
-            if(o.servingTo!==o.home) moveCab(o,o.home);
-            o.servingTo=o.home;
+              if(t>0){ o.cab.classList.add('cab-arriving'); o.doorT=setTimeout(()=>{ o.doorT=null; openDoors(o); pickedUp(o); }, t*1000); }
+              else { openDoors(o); pickedUp(o); }
+            } else if(!o.doorsOpen && !o.doorT){ openDoors(o); pickedUp(o); }   // already parked here → just open
+            else if(o.doorsOpen) pickedUp(o);             // doors already open (Tricsy called it) → carry on manually
+          } else {                                        // nothing to do: it stays on the floor where it stopped,
+            clearTimeout(o.doorT); o.doorT=null; closeDoors(o); setLift(o,false);   // doors shut, waiting for the
+            o.servingTo = o.at ?? o.home;                 // next call it happens to be closest to
           }
         });
-        // blue stop-rings = floors each active cabin will stop at (its served destinations)
-        [L,R].forEach(o=> o.stations.forEach(s=>s.classList.remove('stop')));
-        up.forEach(i=>{ if(upLift) upLift.stations[i].classList.add('stop'); });
-        down.forEach(i=>{ if(downLift) downLift.stations[i].classList.add('stop'); });
-        // pulse the selected floors' glow while the lift is travelling; settle when it arrives
+        arrivalAt = performance.now() + maxT*1000;        // when the cabin reaches the pickup floor
+        // blue stop-rings = the floors each car was given
+        [L,R].forEach(o=> o.stations.forEach(st=>st.classList.remove('stop')));
+        [...dests].forEach(i=>{ const o=assign.get(i); if(o) o.stations[i].classList.add('stop'); });
+        // pulse the selected floors' glow while a car is travelling; settle when it arrives
         const selPills=[...dests].map(i=>pill(byIdx(i).name));
         if(maxT>0){
           clearTimeout(pulseT);
-          document.querySelectorAll('.pulsing').forEach(p=>p.classList.remove('pulsing'));
+          document.querySelectorAll('.dsel.pulsing').forEach(p=>p.classList.remove('pulsing'));
           selPills.forEach(p=>p.classList.add('pulsing'));
-          pulseT=setTimeout(()=>{ document.querySelectorAll('.pulsing').forEach(p=>p.classList.remove('pulsing')); pulseT=null; }, maxT*1000);
+          pulseT=setTimeout(()=>{ document.querySelectorAll('.dsel.pulsing').forEach(p=>p.classList.remove('pulsing')); pulseT=null; }, maxT*1000);
         } else if(pulseT){ selPills.forEach(p=>p.classList.add('pulsing')); }
         setWordmark(byIdx(curIdx));
         renderStops();
         if(dests.size===0){ kick.textContent='YOU ARE HERE'; sub.textContent=hereTxt(byIdx(curIdx)); return; }
-        const parts=[]; if(upLift) parts.push('Lift '+upLift.label+' up'); if(downLift) parts.push('Lift '+downLift.label+' down');
+        const parts=[L,R].filter(o=>stopsFor(o).length)
+                         .map(o=>'Lift '+o.label+' '+(stopsFor(o)[0]<curIdx?'up':'down'));
         kick.textContent='ON ROUTE';
         sub.textContent=dests.size+' floor'+(dests.size>1?'s':'')+' · '+parts.join(', ');
       }
 
+      // --- ride along: once you are in, the lift really drives your floors and they go out one by one ---
+      let rideT=[];
+      const rt=(ms,fn)=> rideT.push(setTimeout(fn,ms));
+      function clearRide(){ rideT.forEach(clearTimeout); rideT=[]; L.riding=false; R.riding=false; L.manifest=[]; R.manifest=[]; }
+      function stopsFor(o){                               // this car's floors, in the order they were called
+        return [...dests].filter(i=> assign.get(i)===o);
+      }
+      function pickedUp(o){ beginRide(o); }            // both modes: once someone is in, the car must deliver
+      function beginRide(o){                              // doors open at your floor: whoever is waiting steps in
+        if(o.riding) return;
+        o.manifest=stopsFor(o);                           // this journey is now fixed: these floors, in this order
+        if(!o.manifest.length) return;                    // anything pressed later needs another pickup trip
+        o.riding=true;
+        rt(2600, ()=> nextStop(o));
+      }
+      function nextStop(o){
+        while(o.manifest.length && !dests.has(o.manifest[0])) o.manifest.shift();   // floor was cancelled meanwhile
+        if(!o.manifest.length){                           // everyone is out: doors shut, the car goes idle here
+          o.riding=false; closeDoors(o); setLift(o,false); route(); return;         // route() may send it for the next call
+        }
+        const next=o.manifest.shift();
+        closeDoors(o);
+        if(mode==='pers') paint(CARD1);                   // he is in the cabin: the panel greets the next one
+        rt(820, ()=>{                                     // doors shut, then it moves
+          const t=moveCab(o,next); o.servingTo=next;
+          rt(t*1000, ()=>{                                // arrived: that floor is served and goes out
+            openDoors(o);
+            dests.delete(next); dropFloor(next);
+            setPill(byIdx(next),'dnor');
+            o.stations[next].classList.remove('stop');
+            renderStops();
+            if(dests.size){ kick.textContent='ON ROUTE'; sub.textContent=dests.size+' floor'+(dests.size>1?'s':'')+' left · Lift '+o.label; }
+            else { kick.textContent='YOU ARE HERE'; sub.textContent=hereTxt(byIdx(curIdx)); }
+            rt(2400, ()=> nextStop(o));
+          });
+        });
+      }
+
+      function leavePersonalized(){        // someone else is pressing: more than one passenger, so no recommendation
+        stopStory();
+        personalize=false; persBtn.classList.remove('on'); persBtn.setAttribute('aria-pressed','false');
+        meeting=false;     meetBtn.classList.remove('on'); meetBtn.setAttribute('aria-pressed','false');
+        setMode('classic');
+      }
       function onClick(f, e){
+        if(mode==='pers') leavePersonalized(); else stopStory();
         spinTrail(pill(f.name));     // dot-mark spins on every interaction
         if(curIdx===null){ curIdx=f.idx; setPill(f,'dcur'); setWordmark(f);
           kick.textContent='YOU ARE HERE'; sub.textContent=hereTxt(f); return; }   // step 1 = where I am
         if(f.idx===curIdx) return;                                              // can't ride to my own floor
-        if(dests.has(f.idx)){ dests.delete(f.idx); setPill(f,'dnor'); }         // multi-select: toggle destination
-        else { dests.add(f.idx); setPill(f,'dsel'); }                           // blue fills left→right via .dsel::before
+        if(dests.has(f.idx)){ dests.delete(f.idx); dropFloor(f.idx); setPill(f,'dnor'); }   // multi-select: toggle destination
+        else { dests.add(f.idx); callFloor(f.idx); setPill(f,'dsel'); }                      // blue fills left→right via .dsel::before
         route();
       }
 
@@ -1124,8 +1434,10 @@
       }
 
       function reset(){
-        randomHomes();
-        curIdx=null; upLift=null; downLift=null; dests.clear(); clearTimeout(pulseT); pulseT=null;
+        clearRide(); assign.clear();
+        // the scripted scenario needs a lift that actually has to travel, so the wait is visible
+        if(personalize||meeting){ L.home=0; R.home=1; } else randomHomes();
+        curIdx=null; upLift=null; downLift=null; dests.clear(); assign.clear(); clearTimeout(pulseT); pulseT=null;
         [L,R].forEach(o=> o.stations && o.stations.forEach(s=>s.classList.remove('stop')));
         FLOORS.forEach(f=>setPill(f,'dnor'));
         setLift(L,false); setLift(R,false);
@@ -1135,12 +1447,25 @@
         L.at=L.home; R.at=R.home;
         Lcab.getBoundingClientRect();
         Lcab.style.transition=Rcab.style.transition=CTR;
-        renderStops();
-        kick.textContent='STEP 1 · YOUR FLOOR'; sub.textContent='Tap the floor you are on'; wm.style.opacity='0';
+        lastSig='';
+        setMode((personalize||meeting)?'pers':'classic');
+        if(meeting){ startMeeting(); }
+        else if(personalize){ startStory(); }
+        else{ stopStory(); renderStops();
+              kick.textContent='STEP 1 · YOUR FLOOR'; sub.textContent='Tap the floor you are on'; wm.style.opacity='0'; }
       }
 
       FLOORS.forEach(f=> pill(f.name).addEventListener('click', e=>onClick(f,e)) );
-      $('#dreset').addEventListener('click', reset);
+      $('#dreset').addEventListener('click', ()=> setToggles(false,false));   // back to the plain demo, both scenarios off
+      const persBtn=$('#dpers'), meetBtn=$('#dmeet');
+      function setToggles(p,m){                                   // the two scenarios are mutually exclusive
+        personalize=p; meeting=m;
+        persBtn.classList.toggle('on',p); persBtn.setAttribute('aria-pressed',String(p));
+        meetBtn.classList.toggle('on',m); meetBtn.setAttribute('aria-pressed',String(m));
+        reset();
+      }
+      persBtn.addEventListener('click', ()=> setToggles(!personalize,false));
+      meetBtn.addEventListener('click', ()=> setToggles(false,!meeting));
       reset();
 
       // scale the 1080×1920 board to fit the viewport
