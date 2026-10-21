@@ -961,6 +961,7 @@
       .lp [data-pencil-name="cabin"] .cab-cdir{ opacity:0; }
     </style>
     <div id="dbar">
+      <button id="dpark" aria-pressed="false">✦ Parking</button>
       <button id="dmeet" aria-pressed="false">✦ Meeting</button>
       <button id="dpers" aria-pressed="false">✦ Personalize</button>
       <button id="dreset">↺ Reset</button>
@@ -1244,7 +1245,7 @@
                     actions:[{label:'Go to my car',icon:'car-front',act:'car'},{label:'Stay in the building',icon:'building-2',act:'stay'}] };
 
       // --- story engine: the camera above the panel recognises you, the system presses for you ---
-      let storyOn=false, personalize=false, meeting=false, arrivalAt=0;   // off = the plain demo
+      let storyOn=false, personalize=false, meeting=false, parking=false, arrivalAt=0;   // off = the plain demo
       // The beats are scheduled one at a time. A throttled tab (or a preview pane that stops drawing)
       // can fire one late — when that happens the timeline is re-based on the real time, so the next
       // beat still gets its full gap instead of the whole story catching up in one burst.
@@ -1304,6 +1305,12 @@
         stopStory(); storyOn=true;
         setHere(4); paint(CARD1);                                        // 0s   you just parked, nothing yet
         at(3000, ()=>{ paint(CARD4); goFloor(2); waitForCab(); });       // 3s   the calendar says FINGER, not your desk
+        runTimeline();
+      }
+      function startParking(){
+        stopStory(); storyOn=true;
+        setHere(0); paint(CARD1);                                        // 0s   evening, you leave your desk on NATURE
+        at(3000, ()=>{ paint(CARD5); goFloor(4); waitForCab(); });       // 3s   Tricsy knows your car is in the garage
         runTimeline();
       }
       function onCardBtn(act){
@@ -1411,6 +1418,7 @@
         stopStory();
         personalize=false; persBtn.classList.remove('on'); persBtn.setAttribute('aria-pressed','false');
         meeting=false;     meetBtn.classList.remove('on'); meetBtn.setAttribute('aria-pressed','false');
+        parking=false;     parkBtn.classList.remove('on'); parkBtn.setAttribute('aria-pressed','false');
         setMode('classic');
       }
       function onClick(f, e){
@@ -1436,7 +1444,8 @@
       function reset(){
         clearRide(); assign.clear();
         // the scripted scenario needs a lift that actually has to travel, so the wait is visible
-        if(personalize||meeting){ L.home=0; R.home=1; } else randomHomes();
+        if(parking){ L.home=4; R.home=3; }                // Lift B comes up from HUB to take you down
+        else if(personalize||meeting){ L.home=0; R.home=1; } else randomHomes();
         curIdx=null; upLift=null; downLift=null; dests.clear(); assign.clear(); clearTimeout(pulseT); pulseT=null;
         [L,R].forEach(o=> o.stations && o.stations.forEach(s=>s.classList.remove('stop')));
         FLOORS.forEach(f=>setPill(f,'dnor'));
@@ -1448,24 +1457,27 @@
         Lcab.getBoundingClientRect();
         Lcab.style.transition=Rcab.style.transition=CTR;
         lastSig='';
-        setMode((personalize||meeting)?'pers':'classic');
+        setMode((personalize||meeting||parking)?'pers':'classic');
         if(meeting){ startMeeting(); }
+        else if(parking){ startParking(); }
         else if(personalize){ startStory(); }
         else{ stopStory(); renderStops();
               kick.textContent='STEP 1 · YOUR FLOOR'; sub.textContent='Tap the floor you are on'; wm.style.opacity='0'; }
       }
 
       FLOORS.forEach(f=> pill(f.name).addEventListener('pointerdown', e=>onClick(f,e)) );
-      $('#dreset').addEventListener('pointerdown', ()=> setToggles(false,false));   // back to the plain demo, both scenarios off
-      const persBtn=$('#dpers'), meetBtn=$('#dmeet');
-      function setToggles(p,m){                                   // the two scenarios are mutually exclusive
-        personalize=p; meeting=m;
+      $('#dreset').addEventListener('pointerdown', ()=> setToggles(false,false,false));   // back to the plain demo, all scenarios off
+      const persBtn=$('#dpers'), meetBtn=$('#dmeet'), parkBtn=$('#dpark');
+      function setToggles(p,m,k){                                 // the three scenarios are mutually exclusive
+        personalize=p; meeting=m; parking=!!k;
         persBtn.classList.toggle('on',p); persBtn.setAttribute('aria-pressed',String(p));
         meetBtn.classList.toggle('on',m); meetBtn.setAttribute('aria-pressed',String(m));
+        parkBtn.classList.toggle('on',parking); parkBtn.setAttribute('aria-pressed',String(parking));
         reset();
       }
-      persBtn.addEventListener('pointerdown', ()=> setToggles(!personalize,false));
-      meetBtn.addEventListener('pointerdown', ()=> setToggles(false,!meeting));
+      persBtn.addEventListener('pointerdown', ()=> setToggles(!personalize,false,false));
+      meetBtn.addEventListener('pointerdown', ()=> setToggles(false,!meeting,false));
+      parkBtn.addEventListener('pointerdown', ()=> setToggles(false,false,!parking));
       reset();
 
       // scale the 1080×1920 board to fit the viewport
