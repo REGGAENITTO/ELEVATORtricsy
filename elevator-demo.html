@@ -1184,7 +1184,7 @@
             tcActions.innerHTML=(s.actions||[]).map((b,i)=>
               '<div class="tc-btn '+(i?'ghost':'primary')+'" data-act="'+b.act+'">'+
                 (i?'':'<i class="tc-cd"></i>')+svgIc(b.icon)+'<span>'+b.label+'</span></div>').join('');
-            tcActions.querySelectorAll('.tc-btn').forEach(b=> b.addEventListener('click',()=>onCardBtn(b.dataset.act)));
+            tcActions.querySelectorAll('.tc-btn').forEach(b=> b.addEventListener('pointerdown',()=>onCardBtn(b.dataset.act)));
             if(s.countdown) countdown(s.countdown);
             tcTxt.style.opacity='1'; tcTxt.style.filter='blur(0)';
           },110);
@@ -1455,8 +1455,8 @@
               kick.textContent='STEP 1 · YOUR FLOOR'; sub.textContent='Tap the floor you are on'; wm.style.opacity='0'; }
       }
 
-      FLOORS.forEach(f=> pill(f.name).addEventListener('click', e=>onClick(f,e)) );
-      $('#dreset').addEventListener('click', ()=> setToggles(false,false));   // back to the plain demo, both scenarios off
+      FLOORS.forEach(f=> pill(f.name).addEventListener('pointerdown', e=>onClick(f,e)) );
+      $('#dreset').addEventListener('pointerdown', ()=> setToggles(false,false));   // back to the plain demo, both scenarios off
       const persBtn=$('#dpers'), meetBtn=$('#dmeet');
       function setToggles(p,m){                                   // the two scenarios are mutually exclusive
         personalize=p; meeting=m;
@@ -1464,8 +1464,8 @@
         meetBtn.classList.toggle('on',m); meetBtn.setAttribute('aria-pressed',String(m));
         reset();
       }
-      persBtn.addEventListener('click', ()=> setToggles(!personalize,false));
-      meetBtn.addEventListener('click', ()=> setToggles(false,!meeting));
+      persBtn.addEventListener('pointerdown', ()=> setToggles(!personalize,false));
+      meetBtn.addEventListener('pointerdown', ()=> setToggles(false,!meeting));
       reset();
 
       // scale the 1080×1920 board to fit the viewport
